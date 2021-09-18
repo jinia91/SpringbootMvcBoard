@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 public interface MybatisUserRepository extends UserRepository {
 
     @Insert("Insert into User(userId, userPwd, userName, email, birthDate, createDate) " +
-            "values(#{userId},#{userPwd},#{userName},#{email},#{birthDate},#{createDate})")
+            "values(#{userId},#{userPwd},#{userName},#{email},#{birthDate}, current_timestamp)")
     @Options(useGeneratedKeys = true,keyProperty ="userUid" )
     void saveUser(User user);
 
