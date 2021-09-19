@@ -14,6 +14,12 @@ public interface MybatisUserRepository extends UserRepository {
     @Options(useGeneratedKeys = true,keyProperty ="userUid" )
     void saveUser(User user);
 
+    @Select("Select Exists (Select * From User where userId= #{userId}) as isExists")
+    boolean existByUserId(String userId);
+
+    @Select("Select Exists (Select * From User where email= #{email}) as isExists")
+    boolean existByEmail(String email);
+
     @Select("Select * From User where userId= #{userId}")
     User findUserById(String userId);
 

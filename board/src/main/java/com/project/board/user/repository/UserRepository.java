@@ -7,5 +7,9 @@ public interface UserRepository {
 
     void saveUser(User user);
     User findUserById(String id);
+    boolean existByUserId(String userId);
+    boolean existByEmail(String email);
+
+
 
 }

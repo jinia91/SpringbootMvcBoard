@@ -30,8 +30,8 @@ class UserServiceImplTest {
         User findUser = userService.findUser(joinUserId);
         // then
         assertThat(user.getUserId()).isEqualTo(findUser.getUserId());
+        assertThat(findUser.getUserPwd()).isNotEqualTo("1234");
     }
-
 
     private User getTestUser() {
         User user = new User();
@@ -43,6 +43,5 @@ class UserServiceImplTest {
         user.setCreateDate(LocalDateTime.now());
         return user;
     }
-
 
 }
