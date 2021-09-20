@@ -44,7 +44,9 @@
 
 </nav>
 
-<form class="justify-content-center container" method="post" action="#"
+<h2>회원가입</h2>
+
+<form class="justify-content-center container" method="post" action="#" onclick="joinValidate()"
       th:action="@{/join}" th:object="${joinFormDto}">
 
 
@@ -63,6 +65,13 @@
     </div>
 
     <div class="form-group mb-2">
+        <label for="userPwdConfirm" class="form-label">비밀번호 확인</label>
+        <input type="password" class="form-control" id="userPwdConfirm"
+               >
+        <div class="field-error"></div>
+    </div>
+
+    <div class="form-group mb-2">
         <label for="userName" class="form-label">이름</label>
         <input type="text" class="form-control" id="userName"
                th:field="*{userName}" th:errorclass="field-error">
@@ -76,20 +85,28 @@
         <div class="field-error" th:errors="*{birthDate}"></div>
     </div>
 
-    <div class="mb-2">
+    <div class="form-group mb-2">
+        <label for="email" class="form-label">이메일</label>
+
+        <div class="form-group mb-2">
+            <input type="email" class="form-control" id="email" placeholder="이메일을 입력해주세요"
+                   th:field="*{email}" th:errorclass="field-error">
+        </div>
+        <div class="field-error" th:errors="*{email}"></div>
+
         <div class="row g-2">
-            <label for="email" class="form-label">이메일</label>
             <div class="col-md">
-                <input type="email" class="form-control" id="email"
-                       th:field="*{email}" th:errorclass="field-error">
+                <input type="text" class="form-control" id="auth" placeholder="인증번호" disabled="true"
+                >
             </div>
             <div class="col-auto">
                 <button type="button" class="btn btn-primary"
-                        id="emailButton" onclick="sendMail()">인증메일 전송
+                        id="emailButton" onclick="sendEmail()">인증메일 전송
                 </button>
             </div>
         </div>
-        <div class="field-error" th:errors="*{email}"></div>
+        <div class="field-error" id="emailValidated"></div>
+
     </div>
 
     <div class="justify-content-center">
@@ -104,29 +121,66 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
 
-    function sendMail() {
+    const authInput = document.getElementById("auth");
+    const emailBtn = document.getElementById("emailButton");
+    let authNum = " ";
+    let emailValidated = false;
+
+    function getCookie(name) {
+        const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return value? value[2] : null;
+    }
+
+    function sendEmail() {
         const email = {
             email : document.getElementById("email").value
         }
 
-        let token = document.cookie
-        console.log(token);
+        let token = getCookie("XSRF-TOKEN");
 
         const xhr = new XMLHttpRequest();
-        xhr.open("POST","/join/sendEmail");
-        xhr.setRequestHeader("content-type","application/json","X-XSRF-TOKEN",token);
-        const jsonEmail = JSON.stringify(email);
-        console.log(jsonEmail);
-        xhr.send(jsonEmail);
+            xhr.open("POST","/join/sendEmail");
+            xhr.setRequestHeader("content-type","application/json");
+            xhr.setRequestHeader("X-XSRF-TOKEN",token);
+        xhr.send(JSON.stringify(email));
 
         xhr.onload = () => {
             if(xhr.status === 200){
                 alert('이메일로 인증요청을 전송했습니다');
+                authNum = JSON.parse(xhr.response);
+                console.log(authNum)
+                authInput.disabled = !authInput.disabled;
+                emailBtn.innerText = "인증번호 확인";
+                emailBtn.setAttribute("onclick","checkAuthNum()");
             }
             else{
                 alert('이메일 전송을 실패했습니다');
             }
         }
     }
+
+    function checkAuthNum(){
+        const inputAuthNum = authInput.value;
+        console.log(inputAuthNum);
+        if(inputAuthNum == authNum){
+            emailValidated = true;
+            console.log("인증번호가 일치합니다");
+        }
+        else{
+            console.log("인증번호가 틀렸습니다");
+        }
+
+    }
+
+    function joinValidate(){
+        if (emailValidated == false){
+            document.getElementById("emailValidated").innerText = "이메일인증을 해주세요";
+            return;
+        }
+        else{
+            document.
+        }
+    }
+
 </script>
 </html>

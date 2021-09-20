@@ -1,6 +1,24 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: jinia
-    password: 1234
-    url: jdbc:mysql://localhost:3306/board?serverTimezone=Asia/Seoul
+    driver-class-name:
+    username:
+    password:
+    url:
+
+  mail:
+    host:
+    port:
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth:
+          timeout:
+          starttls:
+            enable:
+
+---
+spring:
+  profiles:
+    active: dev
