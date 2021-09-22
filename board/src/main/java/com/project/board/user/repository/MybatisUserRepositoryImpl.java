@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
-public interface MybatisUserRepository extends UserRepository {
+public interface MybatisUserRepositoryImpl extends UserRepository {
 
     @Insert("Insert into User(userId, userPwd, userName, email, birthDate, createDate) " +
             "values(#{userId},#{userPwd},#{userName},#{email},#{birthDate}, current_timestamp)")

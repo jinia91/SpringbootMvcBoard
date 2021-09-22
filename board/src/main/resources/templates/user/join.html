@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Join</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <style>
+
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+
         .field-error {
             border-color: red;
             color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
         }
     </style>
 
@@ -44,76 +58,84 @@
 
 </nav>
 
-<h2>회원가입</h2>
+<div class="container">
+    <div class="row">
+        <h2 class="py-3 mb-3 text-center">회원 가입</h2>
 
-<form class="justify-content-center container" method="post" action="#" onclick="joinValidate()"
-      th:action="@{/join}" th:object="${joinFormDto}">
+        <form method="post" action="#" id="joinForm"
+              th:action="@{/join}" th:object="${joinFormDto}">
 
 
-    <div class="form-group mb-2">
-        <label for="userId" class="form-label">아이디</label>
-        <input type="text" class="form-control" id="userId"
-               th:field="*{userId}" th:errorclass="field-error">
-        <div class="field-error" th:errors="*{userId}"></div>
-    </div>
+            <div class="mb-2 col">
+                <label for="userId" class="form-label">아이디</label>
+                <input type="text" class="form-control" id="userId" onkeyup="checkId()"
+                       th:field="*{userId}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{userId}"></div>
+                <div class="field-error" id="idError"></div>
+            </div>
 
-    <div class="form-group mb-2">
-        <label for="userPwd" class="form-label">비밀번호</label>
-        <input type="password" class="form-control" id="userPwd"
-               th:field="*{userPwd}" th:errorclass="field-error">
-        <div class="field-error" th:errors="*{userPwd}"></div>
-    </div>
+            <div class="mb-2 col">
+                <label for="userPwd" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="userPwd" onkeyup="checkPwd()"
+                       th:field="*{userPwd}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{userPwd}"></div>
+                <div class="field-error" id="pwdError"></div>
+            </div>
 
-    <div class="form-group mb-2">
-        <label for="userPwdConfirm" class="form-label">비밀번호 확인</label>
-        <input type="password" class="form-control" id="userPwdConfirm"
-               >
-        <div class="field-error"></div>
-    </div>
-
-    <div class="form-group mb-2">
-        <label for="userName" class="form-label">이름</label>
-        <input type="text" class="form-control" id="userName"
-               th:field="*{userName}" th:errorclass="field-error">
-        <div class="field-error" th:errors="*{userName}"></div>
-    </div>
-
-    <div class="form-group mb-2">
-        <label for="birthDate" class="form-label">생년월일</label>
-        <input type="date" class="form-control" id="birthDate"
-               th:field="*{birthDate}" th:errorclass="field-error">
-        <div class="field-error" th:errors="*{birthDate}"></div>
-    </div>
-
-    <div class="form-group mb-2">
-        <label for="email" class="form-label">이메일</label>
-
-        <div class="form-group mb-2">
-            <input type="email" class="form-control" id="email" placeholder="이메일을 입력해주세요"
-                   th:field="*{email}" th:errorclass="field-error">
-        </div>
-        <div class="field-error" th:errors="*{email}"></div>
-
-        <div class="row g-2">
-            <div class="col-md">
-                <input type="text" class="form-control" id="auth" placeholder="인증번호" disabled="true"
+            <div class="mb-2 col">
+                <label for="userPwdConfirm" class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-control" onkeyup="checkEqualPwd()" id="userPwdConfirm"
                 >
+                <div class="field-error" id="pwdConfError"></div>
             </div>
-            <div class="col-auto">
-                <button type="button" class="btn btn-primary"
-                        id="emailButton" onclick="sendEmail()">인증메일 전송
-                </button>
+
+            <div class="mb-2 col">
+                <label for="userName" class="form-label">이름</label>
+                <input type="text" class="form-control" id="userName" onkeyup="checkName()"
+                       th:field="*{userName}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{userName}"></div>
+                <div class="field-error" id="nameError"></div>
             </div>
+
+            <div class="mb-2 col">
+                <label for="birthDate" class="form-label">생년월일</label>
+                <input type="date" class="form-control" id="birthDate" onkeyup="checkBirth()"
+                       th:field="*{birthDate}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{birthDate}"></div>
+                <div class="field-error" id="birthDateError"></div>
+            </div>
+
+            <div class="mb-2">
+                <label for="email" class="form-label">이메일</label>
+
+                <div class="mb-2 col">
+                    <input type="email" class="form-control" id="email" placeholder="이메일을 입력해주세요" oninput="checkEmail()"
+                           th:field="*{email}" th:errorclass="field-error">
+                </div>
+                <div class="field-error" th:errors="*{email}"></div>
+                <div class="field-error" id="emailError"></div>
+
+                <div class="row g-2">
+                    <div class="col">
+                        <input type="text" class="form-control" id="auth" placeholder="인증번호" disabled="true"
+                        >
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-primary"
+                                id="emailButton" onclick="sendEmail()">인증메일 전송
+                        </button>
+                    </div>
+                </div>
+                <div class="field-error" id="emailValidated"></div>
+
+            </div>
+        </form>
+
+        <div class="py-4 mb-5">
+            <button class="w-100 btn btn-primary" onclick="joinValidate()">회원 가입</button>
         </div>
-        <div class="field-error" id="emailValidated"></div>
-
     </div>
-
-    <div class="justify-content-center">
-        <button type="submit" class="btn btn-primary">회원 가입</button>
-    </div>
-
-</form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
@@ -121,64 +143,202 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
 
-    const authInput = document.getElementById("auth");
-    const emailBtn = document.getElementById("emailButton");
+    const joinForm = document.getElementById("joinForm");
+
     let authNum = " ";
     let emailValidated = false;
+    let pwdEqValidated = false;
 
-    function getCookie(name) {
-        const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return value? value[2] : null;
+    function checkId() {
+        let inputId = document.getElementById("userId");
+        let reg = /^(?=.*\d{1,15})(?=.*[a-zA-Z]{1,15}).{4,15}$/;
+        let errMsg = document.getElementById("idError");
+
+        if (inputId.value == "") {
+            errMsg.innerText = "아이디를 작성해주세요.";
+            return false;
+        } else if (!reg.test(inputId.value)) {
+            errMsg.innerText = "아이디는 영문/숫자 조합으로 4자이상 15자 이하로 작성해주세요.";
+            return false;
+        }
+        errMsg.innerText = "";
+        return true;
+    }
+
+    function checkEmail() {
+        let inputEmail = document.getElementById("email");
+        let errMsg = document.getElementById("emailError");
+        let reg = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+        if (inputEmail.value == "") {
+            errMsg.innerText = "이메일을 입력해주세요.";
+            return false;
+        } else if (!reg.test(inputEmail.value)) {
+            errMsg.innerText = "이메일이 양식에 맞지 않습니다.";
+            return false;
+        }
+        errMsg.innerText = "";
+        return true;
+    }
+
+    function checkPwd() {
+
+        let inputPwd = document.getElementById("userPwd");
+        let reg = /(?=.*\d{1,30})(?=.*[~`!@#$%\^&*()-+=]{1,30})(?=.*[a-zA-Z]{1,30}).{8,30}$/;
+        let errMsg = document.getElementById("pwdError");
+
+        if (inputPwd.value == "") {
+            errMsg.innerText = "비밀번호를 입력해주세요.";
+            return false;
+        } else if (!reg.test(inputPwd.value)) {
+            errMsg.innerText = "비밀번호는 영문/숫자/특수문자를 1회 이상 사용하여 8자이상 30자 이내로 작성해주세요";
+            return false;
+        }
+        errMsg.innerText = "";
+        return true;
+    }
+
+    function checkName() {
+
+        let inputName = document.getElementById("userName");
+        let reg = /^[가-힣|a-z|A-Z].{1,10}$/;
+        let errMsg = document.getElementById("nameError");
+
+        if (inputName.value == "") {
+            errMsg.innerText = "이름을 입력해주세요.";
+            return false;
+        } else if (!reg.test(inputName.value)) {
+            errMsg.innerText = "정상적인 이름을 10자 이내로 작성해주세요";
+            return false;
+        }
+        errMsg.innerText = "";
+        return true;
+    }
+
+    function checkEqualPwd() {
+
+        let pwdConfirm = document.getElementById("userPwdConfirm");
+        let errMsg = document.getElementById("pwdConfError");
+
+        if (pwdConfirm.value == "") {
+            errMsg.innerText = "비밀번호를 확인해주세요";
+            pwdEqValidated = false;
+        } else if (document.getElementById("userPwd").value != pwdConfirm.value) {
+            errMsg.setAttribute("class", "field-error");
+            errMsg.innerText = "비밀번호가 일치하지 않습니다.";
+            pwdEqValidated = false;
+        } else {
+            errMsg.setAttribute("class", "field-error-solve");
+            errMsg.innerText = "비밀번호가 일치합니다.";
+            pwdEqValidated = true;
+        }
+
+    }
+
+    function checkBirth() {
+        if (document.getElementById("birthDate").value == "") {
+            document.getElementById("birthDateError").innerText = "생년월일을 기입해주세요";
+            return false;
+        }
+        document.getElementById("birthDateError").innerText = "";
+        return true;
+    }
+
+    function getCookie(str) {
+        const value = document.cookie.match('(^|;) ?' + str + '=([^;]*)(;|$)');
+        return value ? value[2] : null;
     }
 
     function sendEmail() {
-        const email = {
-            email : document.getElementById("email").value
+
+        const authInput = document.getElementById("auth");
+        const emailBtn = document.getElementById("emailButton");
+        let emailInput = document.getElementById("email");
+        if (!checkEmail()) {
+            return;
+        }
+        document.getElementById("emailError").innerText = "";
+
+        alert('이메일로 인증요청을 전송했습니다.');
+
+        authInput.disabled = !authInput.disabled;
+        emailInput.readOnly = true;
+
+        emailBtn.innerText = "인증번호 확인";
+        emailBtn.setAttribute("onclick", "checkEmailAuth()");
+
+        const jEmail = {
+            email: emailInput.value
         }
 
         let token = getCookie("XSRF-TOKEN");
 
         const xhr = new XMLHttpRequest();
-            xhr.open("POST","/join/sendEmail");
-            xhr.setRequestHeader("content-type","application/json");
-            xhr.setRequestHeader("X-XSRF-TOKEN",token);
-        xhr.send(JSON.stringify(email));
+        xhr.open("POST", "/join/sendEmail");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("X-XSRF-TOKEN", token);
+        xhr.send(JSON.stringify(jEmail));
 
         xhr.onload = () => {
-            if(xhr.status === 200){
-                alert('이메일로 인증요청을 전송했습니다');
+
+            if (xhr.status === 200) {
                 authNum = JSON.parse(xhr.response);
                 console.log(authNum)
-                authInput.disabled = !authInput.disabled;
-                emailBtn.innerText = "인증번호 확인";
-                emailBtn.setAttribute("onclick","checkAuthNum()");
-            }
-            else{
-                alert('이메일 전송을 실패했습니다');
+
+            } else {
+                alert('서버오류로 이메일 전송이 실패했습니다.');
             }
         }
+
     }
 
-    function checkAuthNum(){
+    function checkEmailAuth() {
+        const authInput = document.getElementById("auth");
+        const emailBtn = document.getElementById("emailButton");
         const inputAuthNum = authInput.value;
         console.log(inputAuthNum);
-        if(inputAuthNum == authNum){
+        let emailValMsg = document.getElementById("emailValidated");
+        if (inputAuthNum == authNum) {
             emailValidated = true;
-            console.log("인증번호가 일치합니다");
-        }
-        else{
-            console.log("인증번호가 틀렸습니다");
-        }
+            authInput.disabled = !authInput.disabled;
 
+            emailValMsg.setAttribute("class", "field-error-solve");
+            emailValMsg.innerText = "이메일인증을 성공했습니다";
+
+            emailBtn.innerText = "인증 완료";
+            emailBtn.setAttribute("onclick", "");
+
+
+        } else {
+            emailValMsg.innerText = "인증번호가 틀립니다. 다시시도해주세요";
+        }
     }
 
-    function joinValidate(){
-        if (emailValidated == false){
-            document.getElementById("emailValidated").innerText = "이메일인증을 해주세요";
-            return;
+    function joinValidate() {
+
+        let submitFlag = true;
+
+        if (!checkId()) {
+            submitFlag = false;
         }
-        else{
-            document.
+        if (!checkPwd()) {
+            submitFlag = false;
+        }
+        if (!checkName()) {
+            submitFlag = false;
+        }
+        if (!checkBirth()) {
+            submitFlag = false;
+        }
+
+        if (emailValidated == false) {
+            document.getElementById("emailValidated").innerText = "이메일인증을 해주세요";
+            submitFlag = false;
+        }
+        if (pwdEqValidated == false) {
+            submitFlag = false;
+        }
+        if (submitFlag) {
+            joinForm.submit();
         }
     }
 

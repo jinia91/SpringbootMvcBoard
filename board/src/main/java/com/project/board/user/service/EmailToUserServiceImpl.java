@@ -24,7 +24,7 @@ public class EmailToUserServiceImpl {
         mailMessage.setText("인증번호는 " + authNum + "입니다.");
 
         log.info("보내는 메일주소 ={}", emailAddress);
-//        javaMailSender.send(mailMessage);
+        javaMailSender.send(mailMessage);
 
         return authNum;
     }

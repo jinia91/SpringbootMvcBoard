@@ -17,7 +17,7 @@ class MailToUserServiceImplTest {
     public void sendEmailTest() throws Exception {
     // given
         EmailAddress emailAddress = new EmailAddress();
-        emailAddress.setEmail("q1q2q0@naver.com");
+        emailAddress.setEmail("prjstudy91@gmail.com");
 
     // when
         mailToUserService.sendEmailForJoinAuth(emailAddress.getEmail());

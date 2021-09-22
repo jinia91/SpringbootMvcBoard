@@ -16,9 +16,4 @@ public class AppConfig {
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-//    @Bean
-//    public JavaMailSender javaMailSender(){
-//        return new JavaMailSenderImpl();
-//    }
 }
