@@ -18,6 +18,11 @@ spring:
           starttls:
             enable:
 
+server:
+  servlet:
+    session:
+      timeout: 15m
+
 ---
 spring:
   profiles:

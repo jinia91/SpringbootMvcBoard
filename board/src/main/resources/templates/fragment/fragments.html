@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<!--내비 바-->
+<nav th:fragment="navbar" class="navbar sticky-top navbar-expand-sm navbar-dark bg-primary">
+
+    <a class="navbar-brand ms-3" th:href="@{/}">게시판 프로젝트</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <form class="form-inline" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="검색" aria-label="Search">
+            </form>
+        </ul>
+
+        <ul class="navbar-nav">
+            <li sec:authorize="isAnonymous()" class="nav-item">
+                <a class="nav-link active" th:href="@{/join}">회원 가입</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="nav-item">
+                <a class="nav-link active" th:href="@{/login}">로그인</a>
+            </li>
+            <li sec:authorize="isAuthenticated()"  class="nav-item">
+                <a class="nav-link active" th:text="${#authentication.name} + '님'" >아이디</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <form method="post" action="#" id="logout" name="logout" th:action="@{/logout}">
+                    <a class="nav-link active" href="#" onclick="document.logout.submit()">로그아웃</a>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+
+</nav>
+
+</html>

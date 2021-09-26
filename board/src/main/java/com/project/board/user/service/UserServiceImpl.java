@@ -1,11 +1,18 @@
 package com.project.board.user.service;
 
 import com.project.board.user.domain.User;
+import com.project.board.user.dto.UserContext;
 import com.project.board.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,11 +20,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public String join(User user) {
-        pwdEncoding(user);
         userRepository.saveUser(user);
         log.info("info Join log = {}", user);
         return user.getUserId();
@@ -30,8 +35,20 @@ public class UserServiceImpl implements UserService {
         return findUser;
     }
 
-    private void pwdEncoding(User user) {
-        user.setUserPwd(passwordEncoder.encode(user.getUserPwd()));
-    }
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User loginUser = userRepository.findUserById(userId);
 
+        if(loginUser == null){
+            throw new UsernameNotFoundException("해당 유저가 없습니다");
+        }
+
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority("Default"));
+
+        UserContext userContext = new UserContext(loginUser, roles);
+
+        return userContext;
+
+    }
 }

@@ -6,6 +6,7 @@ import com.project.board.user.service.UserService;
 import com.project.board.user.validation.JoinFormDtoValidator;
 import com.project.board.user.validation.ValidationSequenceGroups;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -22,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final JoinFormDtoValidator joinFormDtoValidator;
+    private final PasswordEncoder passwordEncoder;
 
     @InitBinder("joinFormDto")
     public void initBinder(WebDataBinder webDataBinder){
@@ -31,24 +33,36 @@ public class UserController {
     @GetMapping("/join")
     public String joinForm(Model model){
         model.addAttribute(new JoinFormDto());
-        return "/user/join";
+        return "user/join";
     }
 
     @PostMapping("/join")
     public String join(@Validated(ValidationSequenceGroups.ValidationSeq.class) @ModelAttribute JoinFormDto joinFormDto, Errors errors){
 
         if(errors.hasErrors()){
-            return "/user/join";
+            return "user/join";
         }
 
+        pwdEncoding(joinFormDto);
         User user = joinFormDto.mappingTo();
         userService.join(user);
         return "redirect:/tmp";
     }
 
+
+    private void pwdEncoding(JoinFormDto joinFormDto) {
+        joinFormDto.setUserPwd(passwordEncoder.encode(joinFormDto.getUserPwd()));
+    }
+
+
+    @GetMapping("/login")
+    public String loginForm(Model model){
+        return "user/login";
+    }
+
     @GetMapping("/tmp")
     public String tmpTest(){
-        return "/user/tmp";
+        return "user/tmp";
     }
 
 
