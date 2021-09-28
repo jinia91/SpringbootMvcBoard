@@ -2,7 +2,6 @@ package com.project.board.user.domain;
 
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,4 +17,5 @@ public class User {
         private String email;
         private LocalDate birthDate;
         private LocalDateTime createDate;
+        private String bio;
 }

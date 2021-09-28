@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>프로필</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-3">
+            <img class="img-thumbnail rounded-circle" alt=""
+                 th:src="@{https://avatars.dicebear.com/api/big-smile/:{userId}.svg(userId=${user.userId})}">
+        </div>
+        <div class="col-7">
+            <h1 class="display-4 " th:text="${user.userId}"></h1>
+            <p class="lead" th:if="${!#strings.isEmpty(user.bio)}" th:text="${user.bio}"></p>
+            <p class="lead" th:if="${#strings.isEmpty(user.bio) && isItYou}">
+                자기 소개를 넣어주세요!
+            </p>
+        </div>
+
+        <div class="row mt-3 text-center">
+
+            <p>
+            <div class="col">
+                <label for="userName" class="form-label">이름</label>
+                <span id="userName" th:text="${user.userName}" class=""></span>
+            </div>
+            </p>
+
+            <p>
+            <div class="col">
+                <label for="birthDate" class="form-label">생년월일</label>
+                <span id="birthDate" th:text="${user.birthDate}" class=""></span>
+            </div>
+            </p>
+
+            <p>
+            <div class="col">
+                <label for="email" class="form-label">이메일</label>
+                <span id="email" th:text="${user.email}" class=""></span>
+            </div>
+            </p>
+            <form>
+                <button class="w-100 btn btn-primary" th:if="${#strings.isEmpty(user.bio) && isItYou}">
+                    개인정보 수정
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

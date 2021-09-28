@@ -11,7 +11,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <form class="form-inline" method="get">
                 <input class="form-control mr-sm-2" type="search" placeholder="검색" aria-label="Search">
@@ -25,9 +25,19 @@
             <li sec:authorize="isAnonymous()" class="nav-item">
                 <a class="nav-link active" th:href="@{/login}">로그인</a>
             </li>
-            <li sec:authorize="isAuthenticated()"  class="nav-item">
-                <a class="nav-link active" th:text="${#authentication.name} + '님'" >아이디</a>
+
+            <li sec:authorize="isAuthenticated()" class="d-none d-md-block">
+                <a th:href="@{/profile/{userId}(userId=${#authentication.name})}">
+                    <img class="d-inline-block align-text-top" alt="" width="40" height="40"
+                         th:src="@{https://avatars.dicebear.com/api/big-smile/:{userId}.svg(userId=${#authentication.name})}">
+                </a>
             </li>
+
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link active" th:href="@{/profile/{userId}(userId=${#authentication.name})}" th:text="${#authentication.name} + '님'">
+                    아이디</a>
+            </li>
+
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <form method="post" action="#" id="logout" name="logout" th:action="@{/logout}">
                     <a class="nav-link active" href="#" onclick="document.logout.submit()">로그아웃</a>

@@ -6,16 +6,17 @@ import com.project.board.user.service.UserService;
 import com.project.board.user.validation.JoinFormDtoValidator;
 import com.project.board.user.validation.ValidationSequenceGroups;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -58,6 +59,27 @@ public class UserController {
     @GetMapping("/login")
     public String loginForm(Model model){
         return "user/login";
+    }
+
+    @GetMapping("/profile/{userId}")
+    public String userProfile(@PathVariable String userId, Principal principal, Model model){
+
+        User findUser = userService.findUser(userId);
+
+        if(findUser == null){
+            throw new IllegalArgumentException(userId+"라는 유저는 존재하지 않습니다");
+        }
+
+        model.addAttribute("user",findUser);
+        model.addAttribute("isItYou", false);
+
+        if(userId.equals(principal.getName())) {
+        model.addAttribute("isItYou", true);
+
+            return "user/profile";
+        }
+
+        return "user/profile";
     }
 
     @GetMapping("/tmp")
