@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>접근오류 서비스에 접속할 수 없습니다.</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center text-center">
+
+        <p class="display-6">잘못된 접근입니다.</p>
+
+
+
+        <div class="col-5 mt-5">
+            <a th:href="@{/}" class="btn btn-primary">메인페이지</a>
+        </div>
+
+        <div class="col-5 mt-5">
+            <a onclick="javascript:history.back()" class="btn btn-primary">이전 페이지</a>
+        </div>
+    </div>
+</div>
+
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

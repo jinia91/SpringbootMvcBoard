@@ -66,9 +66,9 @@ public class UserController {
 
         User findUser = userService.findUser(userId);
 
-        if(findUser == null){
-            throw new IllegalArgumentException(userId+"라는 유저는 존재하지 않습니다");
-        }
+//        if(findUser == null){
+//            throw new IllegalArgumentException(userId+"라는 유저는 존재하지 않습니다");
+//        }
 
         model.addAttribute("user",findUser);
         model.addAttribute("isItYou", false);

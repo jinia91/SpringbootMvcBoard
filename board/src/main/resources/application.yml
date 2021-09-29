@@ -22,7 +22,9 @@ server:
   servlet:
     session:
       timeout: 15m
-
+  error:
+    whitelabel:
+      enabled: false
 ---
 spring:
   profiles:
