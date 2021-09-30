@@ -29,9 +29,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUser(String userId) {
+    public User findUserByUserId(String userId) {
         User findUser = userRepository.findUserById(userId);
         return findUser;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User findUser = userRepository.findUserByEmail(email);
+        return findUser;
+    }
+
+    @Override
+    public boolean chkEmailValidatedWithName(String email, String userName) {
+        User foundUser = findUserByEmail(email);
+        if(foundUser == null) return false;
+        if(foundUser.getUserName().equals(userName)) return true;
+        return false;
     }
 
     @Override

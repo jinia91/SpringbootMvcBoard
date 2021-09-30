@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>아이디 찾기</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+  <style>
+    @media (min-width: 768px) {
+      .container {
+        width: 600px;
+      }
+    }
+
+    .field-error {
+      border-color: red;
+      color: red;
+    }
+
+    .field-error-solve {
+      border-color: blue;
+      color: blue;
+    }
+
+
+  </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+  <div class="row">
+    <h2 class="py-3 mb-2 text-center">비밀번호 찾기</h2>
+    <hr size="3px">
+
+    <form method="post" action="#" id="idInquiryForm"
+          th:action="@{/pwdInquiry}">
+      <small>본인 확인 이메일 주소와 가입시 입력한 이메일 주소가 같아야 인증번호를 받을수 있습니다.</small>
+
+      <div class="mb-2 col">
+        <label for="userId" class="form-label">아이디</label>
+        <input type="text" class="form-control" id="userId" onkeyup="checkId()">
+        <div class="field-error" id="idError"></div>
+      </div>
+
+      <div class="mt-4 mb-2 col">
+        <label for="userName" class="form-label">이름</label>
+        <input type="text" class="form-control" id="userName" onkeyup="checkName()">
+        <div class="field-error" id="nameError"></div>
+      </div>
+
+      <div class="mb-2 col">
+        <label for="email" class="form-label">이메일</label>
+        <input type="email" class="form-control" id="email" placeholder="이메일을 입력해주세요" oninput="checkEmail()">
+      </div>
+      <div class="field-error" id="emailError"></div>
+
+      <div class="row g-2">
+        <div class="col">
+          <input type="text" class="form-control" id="auth" placeholder="인증번호" disabled="true"
+          >
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary"
+                  id="emailButton" onclick="sendEmail()">인증메일 전송
+          </button>
+        </div>
+      </div>
+      <div class="field-error" id="emailValidated"></div>
+
+
+      <div class="py-4">
+        <button class="w-100 btn btn-primary">다음</button>
+      </div>
+
+    </form>
+  </div>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/user/chkEmail.js"></script>
+  <script src="/js/user/chkName.js"></script>
+  <script src="/js/user/chkId.js"></script>
+</body>
+</html>

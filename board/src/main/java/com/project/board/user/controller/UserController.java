@@ -6,8 +6,6 @@ import com.project.board.user.service.UserService;
 import com.project.board.user.validation.JoinFormDtoValidator;
 import com.project.board.user.validation.ValidationSequenceGroups;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.Banner;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,8 +49,14 @@ public class UserController {
     }
 
 
-    private void pwdEncoding(JoinFormDto joinFormDto) {
-        joinFormDto.setUserPwd(passwordEncoder.encode(joinFormDto.getUserPwd()));
+    @GetMapping("/user/help/pwdInquiry")
+    public String findPwd(){
+        return "user/help/pwdInquiry";
+    }
+
+    @GetMapping("/user/help/idInquiry")
+    public String findId(){
+        return "user/help/idInquiry";
     }
 
 
@@ -64,11 +68,11 @@ public class UserController {
     @GetMapping("/profile/{userId}")
     public String userProfile(@PathVariable String userId, Principal principal, Model model){
 
-        User findUser = userService.findUser(userId);
+        User findUser = userService.findUserByUserId(userId);
 
-//        if(findUser == null){
-//            throw new IllegalArgumentException(userId+"라는 유저는 존재하지 않습니다");
-//        }
+        if(findUser == null){
+            throw new IllegalArgumentException(userId+"라는 유저는 존재하지 않습니다");
+        }
 
         model.addAttribute("user",findUser);
         model.addAttribute("isItYou", false);
@@ -87,5 +91,8 @@ public class UserController {
         return "user/tmp";
     }
 
+    private void pwdEncoding(JoinFormDto joinFormDto) {
+        joinFormDto.setUserPwd(passwordEncoder.encode(joinFormDto.getUserPwd()));
+    }
 
 }

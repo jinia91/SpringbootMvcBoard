@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
 
     String join(User user);
-    User findUser(String userId);
-
+    User findUserByUserId(String userId);
+    User findUserByEmail(String email);
+    boolean chkEmailValidatedWithName(String email, String userName);
 }

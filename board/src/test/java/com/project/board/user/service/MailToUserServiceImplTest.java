@@ -20,7 +20,7 @@ class MailToUserServiceImplTest {
         emailAddress.setEmail("prjstudy91@gmail.com");
 
     // when
-        mailToUserService.sendEmailForJoinAuth(emailAddress.getEmail());
+        mailToUserService.sendEmailForAuth(emailAddress.getEmail());
     // then
 
     }

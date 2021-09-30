@@ -13,7 +13,7 @@ public class EmailToUserServiceImpl {
 
     private final JavaMailSender javaMailSender;
 
-    public String sendEmailForJoinAuth(String emailAddress) {
+    public String sendEmailForAuth(String emailAddress) {
 
         String authNum = getAuthNum();
         log.info("인증번호 ={}", authNum);

@@ -20,6 +20,9 @@ public interface MybatisUserRepositoryImpl extends UserRepository {
     @Select("Select Exists (Select * From User where email= #{email}) as isExists")
     boolean existByEmail(String email);
 
+    @Select("Select * From User where email= #{email}")
+    User findUserByEmail(String email);
+
     @Select("Select * From User where userId= #{userId}")
     User findUserById(String userId);
 

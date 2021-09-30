@@ -30,9 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .mvcMatchers("/node_modules/**","/resources/**","/favicon.ico")
+                .antMatchers("js/**","/js/user/**","/node_modules/**","/resources/**","/favicon.ico")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 API
         http
                 .authorizeRequests()
-                    .mvcMatchers("/", "/join", "/join/sendEmail", "/tmp").permitAll()
+                    .mvcMatchers("/", "/join", "/join/sendEmail", "/tmp","/user/help/pwdInquiry",
+                            "/user/help/idInquiry","/help/user/sendEmailWithName")
+                    .permitAll()
                     .anyRequest().authenticated();
 
         // 인증 API

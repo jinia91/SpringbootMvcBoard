@@ -27,7 +27,7 @@ class UserServiceImplTest {
         User user = getTestUser();
         // when
         String joinUserId = userService.join(user);
-        User findUser = userService.findUser(joinUserId);
+        User findUser = userService.findUserByUserId(joinUserId);
         // then
         assertThat(user.getUserId()).isEqualTo(findUser.getUserId());
         assertThat(findUser.getUserPwd()).isNotEqualTo("1234");
@@ -43,5 +43,21 @@ class UserServiceImplTest {
         user.setCreateDate(LocalDateTime.now());
         return user;
     }
+
+    @Test
+    @DisplayName("email로 유저 조회 테스트")
+    void findUserByEmail(){
+        //given
+        User user = getTestUser();
+        String joinUserId = userService.join(user);
+
+        //when
+        User foundUser1 = userService.findUserByUserId(user.getUserId());
+        User foundUser2 = userService.findUserByEmail(user.getEmail());
+        //then
+        assertThat(foundUser1.getEmail()).isEqualTo(foundUser1.getEmail());
+        assertThat(foundUser2.getEmail()).isEqualTo(foundUser2.getEmail());
+    }
+
 
 }
