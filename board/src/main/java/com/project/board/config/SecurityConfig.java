@@ -42,8 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 API
         http
                 .authorizeRequests()
-                    .mvcMatchers("/", "/join", "/join/sendEmail", "/tmp","/user/help/pwdInquiry",
-                            "/user/help/idInquiry","/help/user/sendEmailWithName")
+                    .mvcMatchers("/", "/join", "/join/sendEmail", "/tmp","/user/help/**")
                     .permitAll()
                     .anyRequest().authenticated();
 
@@ -72,10 +71,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    // 비밀번호 인코더 빈등록
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
 }

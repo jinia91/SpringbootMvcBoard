@@ -1,10 +1,7 @@
 package com.project.board.user.repository;
 
 import com.project.board.user.domain.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface MybatisUserRepositoryImpl extends UserRepository {
@@ -26,5 +23,7 @@ public interface MybatisUserRepositoryImpl extends UserRepository {
     @Select("Select * From User where userId= #{userId}")
     User findUserById(String userId);
 
+    @Update("Update User set userPwd = #{userPwd} where userId = #{userId}")
+    void updatePwd(User user);
 
 }

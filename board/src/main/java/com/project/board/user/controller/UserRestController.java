@@ -2,6 +2,7 @@ package com.project.board.user.controller;
 
 import com.project.board.user.dto.EmailAddress;
 import com.project.board.user.dto.EmailWithName;
+import com.project.board.user.dto.EmailWithNameAndId;
 import com.project.board.user.service.EmailToUserServiceImpl;
 import com.project.board.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,43 @@ public class UserRestController {
     private final UserService userService;
 
     @PostMapping("/join/sendEmail")
-    public @ResponseBody String sendEmail(@RequestBody EmailAddress emailAddress){
+    public @ResponseBody
+    String sendEmailForJoin(@RequestBody EmailAddress emailAddress) {
 
-        String authNum = mailToUserService.sendEmailForAuth(emailAddress.getEmail());
+        String authNum = mailToUserService.sendEmailForJoinAuth(emailAddress.getEmail());
 
         return authNum;
     }
 
-    @PostMapping("/help/user/sendEmailWithName")
+    @PostMapping("/user/help/sendEmailWithName")
     public @ResponseBody
-    ResponseEntity sendEmailWithName(@RequestBody EmailWithName emailWithName){
+    ResponseEntity sendEmailForId(@RequestBody EmailWithName emailWithName) {
 
         String email = emailWithName.getEmail();
         String userName = emailWithName.getUserName();
 
         boolean isValidated = userService.chkEmailValidatedWithName(email, userName);
 
-        if(isValidated) {
-            String authNum = mailToUserService.sendEmailForAuth(email);
+        if (isValidated) {
+            String authNum = mailToUserService.sendEmailForJoinAuth(email);
+            return ResponseEntity.accepted().body(authNum);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @PostMapping("/user/help/sendEmailWithNameAndId")
+    public @ResponseBody
+    ResponseEntity sendEmailForPwd(@RequestBody EmailWithNameAndId emailWithNameAndId) {
+
+        String email = emailWithNameAndId.getEmail();
+        String userName = emailWithNameAndId.getUserName();
+        String userId = emailWithNameAndId.getUserId();
+
+        boolean isValidated = userService.chkEmailValidatedWithNameAndId(email, userId, userName);
+
+        if (isValidated) {
+            String authNum = mailToUserService.sendEmailForJoinAuth(email);
             return ResponseEntity.accepted().body(authNum);
         }
 

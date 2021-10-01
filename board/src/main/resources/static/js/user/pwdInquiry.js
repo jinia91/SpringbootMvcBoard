@@ -4,6 +4,7 @@ let emailValidated = false;
 function sendEmailWithId() {
 
     const authInput = document.getElementById("auth");
+    const idInput = document.getElementById("userId");
     const nameInput = document.getElementById("userName");
     const emailBtn = document.getElementById("emailButton");
     let emailInput = document.getElementById("email");
@@ -21,9 +22,10 @@ function sendEmailWithId() {
     emailBtn.innerText = "인증번호 확인";
     emailBtn.setAttribute("onclick", "checkEmailAuth()");
 
-    const emailWithName = {
+    const emailWithNameAndId = {
         email: emailInput.value,
-        userName: nameInput.value
+        userName: nameInput.value,
+        userId: idInput.value
     }
 
     let token = getCsrfToken();
@@ -32,7 +34,7 @@ function sendEmailWithId() {
     xhr.open("POST", "/user/help/sendEmailWithName");
     xhr.setRequestHeader("content-type", "application/json");
     xhr.setRequestHeader("X-XSRF-TOKEN", token);
-    xhr.send(JSON.stringify(emailWithName));
+    xhr.send(JSON.stringify(emailWithNameAndId));
 
     xhr.onload = () => {
 

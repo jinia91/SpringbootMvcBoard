@@ -10,4 +10,5 @@ public interface UserRepository {
     boolean existByUserId(String userId);
     boolean existByEmail(String email);
     User findUserByEmail(String email);
+    void updatePwd(User user);
 }

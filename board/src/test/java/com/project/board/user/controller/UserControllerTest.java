@@ -28,7 +28,7 @@ class UserControllerTest {
         // when
         ResultActions perform = mockMvc.perform(get("/join"));
         // then
-        perform.andExpect(view().name("/user/join"))
+        perform.andExpect(view().name("user/join"))
                 .andExpect(model().attributeExists("joinFormDto"))
                 .andExpect(status().isOk());
     }
@@ -38,12 +38,7 @@ class UserControllerTest {
     public void joinFormValidationTest() throws Exception {
         // given
         // when
-        ResultActions perform = mockMvc.perform(post("/join")
-                .param("userId", "testId1")
-                .param("userPwd", "1q2w3e4r!")
-                .param("userName", "김프붕")
-                .param("birthDate", "2000-09-10")
-                .param("email", "qwer@qwer").with(csrf()));
+        ResultActions perform = getTestUserWithMoc();
         // then
         perform.andExpect(view().name("redirect:/tmp"))
                 .andExpect(status().is3xxRedirection());
@@ -69,9 +64,8 @@ class UserControllerTest {
                 .param("email", "qwer@qwer2").with(csrf()));
 
         // then
-        perform2.andExpect(view().name("/user/join")); // 중복 아이디 검증
+        perform2.andExpect(view().name("user/join")); // 중복 아이디 검증
     }
-
 
     @Test
     @DisplayName("회원가입 처리 통합 검증 실패 테스트V2")
@@ -93,9 +87,72 @@ class UserControllerTest {
                 .param("email", "qwer@qwer").with(csrf()));  // 메일 중복
 
         // then
-        perform2.andExpect(view().name("/user/join")); // 중복 아이디 검증
+        perform2.andExpect(view().name("user/join")); // 중복 메일 검증
+    }
+    @Test
+    @DisplayName("아이디 찾기 성공 테스트")
+    public void findIdTestSuc() throws Exception {
+        // given
+        ResultActions perform = getTestUserWithMoc();
+        // when
+        ResultActions perform2 = mockMvc.perform(post("/user/help/idInquiry")
+                .param("email", "qwer@qwer")
+                .param("userName", "김프붕").with(csrf()));
+
+        // then
+        perform2.andExpect(view().name("user/help/returnId"));
+    }
+    @Test
+    @DisplayName("아이디 찾기 실패 테스트")
+    public void findIdTestFail() throws Exception {
+        // given
+        ResultActions perform = getTestUserWithMoc();
+        // when
+        ResultActions perform2 = mockMvc.perform(post("/user/help/idInquiry")
+                .param("email", "qwer@qwer")
+                .param("userName", "김프으붕").with(csrf()));
+
+        // then
+        perform2.andExpect(view().name("/error"));
+    }
+    @Test
+    @DisplayName("비밀번호 찾기 성공 테스트")
+    public void findPwdTestSuc() throws Exception {
+        // given
+        ResultActions perform = getTestUserWithMoc();
+        // when
+        ResultActions perform2 = mockMvc.perform(post("/user/help/pwdInquiry")
+                .param("email", "qwer@qwer")
+                .param("userId", "testId100")
+                .param("userName", "김프붕").with(csrf()));
+
+        // then
+        perform2.andExpect(view().name("user/help/returnPwd"));
+    }
+    @Test
+    @DisplayName("비밀번호 찾기 실패 테스트")
+    public void findPwdTestFail() throws Exception {
+        // given
+        ResultActions perform = getTestUserWithMoc();
+        // when
+        ResultActions perform2 = mockMvc.perform(post("/user/help/pwdInquiry")
+                .param("email", "qwer@qwer")
+                .param("userId", "testId1000")
+                .param("userName", "김프으붕").with(csrf()));
+
+        // then
+        perform2.andExpect(view().name("/error"));
     }
 
+
+    private ResultActions getTestUserWithMoc() throws Exception {
+        return mockMvc.perform(post("/join")
+                .param("userId", "testId100")
+                .param("userPwd", "1q2w3e4r!")
+                .param("userName", "김프붕")
+                .param("birthDate", "2000-09-10")
+                .param("email", "qwer@qwer").with(csrf()));
+    }
 
 
 }

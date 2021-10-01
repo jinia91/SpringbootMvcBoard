@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>비밀번호 찾기</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
+        }
+
+
+    </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row">
+        <h2 class="py-3 mb-2 text-center">비밀번호 찾기</h2>
+        <hr size="3px">
+
+        <div class="text-center" th:text="|임시 비밀번호가 이메일로 전송되었습니다.|"></div>
+
+
+    </div>
+</div>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
