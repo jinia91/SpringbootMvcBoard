@@ -73,13 +73,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changeUserPwd(User user) {
+        pwdEncoding(user);
+        userRepository.updatePwd(user);
+    }
+
+    @Override
+    public void changeUserProfile(User user) {
+        userRepository.updateUserBioAndName(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User loginUser = userRepository.findUserById(userId);
-
-        if(loginUser == null){
-            throw new UsernameNotFoundException("해당 유저가 없습니다");
-        }
-
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("Default"));
 

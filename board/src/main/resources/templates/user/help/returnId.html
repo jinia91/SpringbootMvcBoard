@@ -39,6 +39,15 @@
 
         <div class="text-center" th:text="|고객님의 정보와 일치하는 아이디는 ${userId} 입니다.|"></div>
 
+        <div class="row mt-5 justify-content-center text-center">
+            <div class="col-5 mt-3">
+                <a th:href="@{/login}" class="btn btn-primary">로그인</a>
+            </div>
+
+            <div class="col-5 mt-3">
+                <a th:href="@{/user/help/pwdInquiry}" class="btn btn-primary">비밀번호찾기</a>
+            </div>
+        </div>
 
     </div>
 </div>

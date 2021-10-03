@@ -11,4 +11,6 @@ public interface UserService extends UserDetailsService {
     boolean chkEmailValidatedWithName(String email, String userName);
     boolean chkEmailValidatedWithNameAndId(String email, String userId, String userName);
     String changeUserPwdToTmp(User user);
+    void changeUserProfile(User userByUserId);
+    void changeUserPwd(User user);
 }

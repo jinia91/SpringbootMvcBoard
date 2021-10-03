@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>비밀번호 수정</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
+
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-3">
+            <img class="img-thumbnail rounded-circle" alt=""
+                 th:src="@{https://avatars.dicebear.com/api/big-smile/:{userId}.svg(userId=${userProfilePwd.userId})}">
+        </div>
+        <div class="col-7">
+            <h1 class="display-4 " th:text="${userProfilePwd.userId}"></h1>
+        </div>
+
+        <form method="post" action="#" id="pwdEditForm"
+              th:action="@{/profile/{userId}/edit/pwd(userId=${userProfilePwd.userId})}" th:object="${userProfilePwd}">
+
+            <div class="mb-2 col">
+                <label for="beforePwd" class="form-label">이전 비밀번호</label>
+                <input type="password" class="form-control" id="beforePwd"
+                       th:field="*{beforePwd}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{beforePwd}"></div>
+            </div>
+
+
+            <div class="mb-2 col">
+                <label for="userPwd" class="form-label">새로운 비밀번호</label>
+                <input type="password" class="form-control" id="userPwd" onkeyup="checkPwd()"
+                       th:field="*{userPwd}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{userPwd}"></div>
+                <div class="field-error" id="pwdError"></div>
+            </div>
+
+            <div class="mb-2 col">
+                <label for="userPwdConfirm" class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-control" onkeyup="checkEqualPwd()" id="userPwdConfirm"
+                >
+                <div class="field-error" id="pwdConfError"></div>
+            </div>
+
+
+        </form>
+        <div class="py-4 mb-5">
+            <button class="w-100 btn btn-primary" onclick="profileEditValidate()">프로필 수정</button>
+        </div>
+    </div>
+</div>
+
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/user/chkPwd.js"></script>
+<script src="/js/user/profilePwdEdit.js"></script>
+</body>
+</html>

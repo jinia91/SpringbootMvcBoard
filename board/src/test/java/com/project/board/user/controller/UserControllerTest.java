@@ -28,7 +28,7 @@ class UserControllerTest {
         // when
         ResultActions perform = mockMvc.perform(get("/join"));
         // then
-        perform.andExpect(view().name("user/join"))
+        perform.andExpect(view().name("user/form/join"))
                 .andExpect(model().attributeExists("joinFormDto"))
                 .andExpect(status().isOk());
     }
@@ -40,7 +40,7 @@ class UserControllerTest {
         // when
         ResultActions perform = getTestUserWithMoc();
         // then
-        perform.andExpect(view().name("redirect:/tmp"))
+        perform.andExpect(view().name("redirect:/joinSuc"))
                 .andExpect(status().is3xxRedirection());
     }
 
@@ -64,7 +64,7 @@ class UserControllerTest {
                 .param("email", "qwer@qwer2").with(csrf()));
 
         // then
-        perform2.andExpect(view().name("user/join")); // 중복 아이디 검증
+        perform2.andExpect(view().name("user/form/join")); // 중복 아이디 검증
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserControllerTest {
                 .param("email", "qwer@qwer").with(csrf()));  // 메일 중복
 
         // then
-        perform2.andExpect(view().name("user/join")); // 중복 메일 검증
+        perform2.andExpect(view().name("user/form/join")); // 중복 메일 검증
     }
     @Test
     @DisplayName("아이디 찾기 성공 테스트")

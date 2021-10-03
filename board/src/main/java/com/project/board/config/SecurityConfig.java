@@ -1,17 +1,16 @@
 package com.project.board.config;
 
+import com.project.board.user.handler.LoginFailHandler;
 import com.project.board.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
@@ -20,6 +19,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
+    private final LoginFailHandler loginFailHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,8 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 API
         http
                 .authorizeRequests()
-                    .mvcMatchers("/", "/join", "/join/sendEmail", "/tmp","/user/help/**")
+                    .mvcMatchers("/joinSuc","/*","/join","/login*", "/join/sendEmail", "/tmp","/user/help/**")
                     .permitAll()
+                    .mvcMatchers(HttpMethod.GET).permitAll()
                     .anyRequest().authenticated();
 
         // 인증 API
@@ -54,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .usernameParameter("userId")
                     .passwordParameter("userPwd")
                     .defaultSuccessUrl("/")
-                    .failureUrl("/login")
+                    .failureHandler(loginFailHandler)
                     .permitAll()
 
                 //로그아웃

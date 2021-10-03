@@ -31,7 +31,7 @@ function sendEmailWithId() {
     let token = getCsrfToken();
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/user/help/sendEmailWithName");
+    xhr.open("POST", "/user/help/sendEmailWithNameAndId");
     xhr.setRequestHeader("content-type", "application/json");
     xhr.setRequestHeader("X-XSRF-TOKEN", token);
     xhr.send(JSON.stringify(emailWithNameAndId));

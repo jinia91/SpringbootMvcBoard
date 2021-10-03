@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>로그인</title>
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
 
     <style>
         @media (min-width: 768px) {
@@ -15,6 +15,15 @@
             }
         }
 
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
+        }
     </style>
 </head>
 
@@ -36,24 +45,29 @@
 
             <div class="mb-2 col">
                 <label for="userPwd" class="form-label">비밀번호</label>
-                <input type="password" class="form-control" id="userPwd" name="userPwd" required>
+                <input type="password" class="form-control" id="userPwd" name="userPwd" onkeyup="checkCapsLock(event)" required>
             </div>
+            <P class="text-center field-error mt-3" id="capsAlert" th:text="${errMsg}">로그인 오류</P>
 
-            <div class="py-4">
+            <div class="py-3">
                 <button class="w-100 btn btn-primary">로그인</button>
             </div>
 
             <div class="row text-center">
                 <div class="col"><small class="text-muted">
-                    <a class="text-secondary text-decoration-none" th:href="@{/user/help/pwdInquiry}">비밀번호 찾기</a></small></div>
+                    <a class="text-secondary text-decoration-none" th:href="@{/user/help/pwdInquiry}">비밀번호
+                        찾기</a></small></div>
                 <div class="col"><small class="text-muted">
-                    <a class="text-secondary text-decoration-none" th:href="@{/user/help/idInquiry}">아이디 찾기</a></small></div>
+                    <a class="text-secondary text-decoration-none" th:href="@{/user/help/idInquiry}">아이디 찾기</a></small>
+                </div>
                 <div class="col"><small class="text-muted">
                     <a class="text-secondary text-decoration-none" th:href="@{/join}">회원가입</a></small></div>
             </div>
         </form>
+    </div>
+</div>
 
-
-        <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/user/capsLock.js"></script>
 </body>
 </html>

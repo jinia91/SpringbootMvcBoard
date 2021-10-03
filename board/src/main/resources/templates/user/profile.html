@@ -56,15 +56,22 @@
                 <span id="email" th:text="${user.email}" class=""></span>
             </div>
             </p>
-            <form>
-                <button class="w-100 btn btn-primary" th:if="${#strings.isEmpty(user.bio) && isItYou}">
-                    개인정보 수정
-                </button>
-            </form>
+
+            <div class="row justify-content-center text-center">
+
+                <div class="col">
+                    <a th:href="|@{/profile/{userId}/edit(userId=${user.userId})}|" th:if="${isItYou}"
+                       class="btn btn-primary">프로필 변경</a>
+                </div>
+                <div class="col">
+                    <a th:href="|@{/profile/{userId}/edit/pwd(userId=${user.userId})}  |" th:if="${isItYou}"
+                       class="btn btn-primary">비밀번호 변경</a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

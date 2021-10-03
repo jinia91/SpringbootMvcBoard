@@ -19,10 +19,10 @@
         </ul>
 
         <ul class="navbar-nav">
-            <li sec:authorize="isAnonymous()" class="nav-item">
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
                 <a class="nav-link active" th:href="@{/join}">회원 가입</a>
             </li>
-            <li sec:authorize="isAnonymous()" class="nav-item">
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
                 <a class="nav-link active" th:href="@{/login}">로그인</a>
             </li>
 

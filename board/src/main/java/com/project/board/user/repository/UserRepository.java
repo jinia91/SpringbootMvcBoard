@@ -11,4 +11,5 @@ public interface UserRepository {
     boolean existByEmail(String email);
     User findUserByEmail(String email);
     void updatePwd(User user);
+    void updateUserBioAndName(User user);
 }

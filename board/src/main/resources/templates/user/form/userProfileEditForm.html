@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>프로필 수정</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
+
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-3">
+            <img class="img-thumbnail rounded-circle" alt=""
+                 th:src="@{https://avatars.dicebear.com/api/big-smile/:{userId}.svg(userId=${user.userId})}">
+        </div>
+        <div class="col-7">
+            <h1 class="display-4 " th:text="${user.userId}"></h1>
+        </div>
+
+        <form method="post" action="#" id="profileEditForm"
+              th:action="@{/profile/{userId}/edit(userId=${user.userId})}" th:object="${user}">
+
+            <div class="mb-2 col">
+                <label for="userName" class="form-label">자기소개</label>
+                <input type="text" class="form-control" id="bio" onkeyup="checkBio()"
+                       th:field="*{bio}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{bio}"></div>
+                <div class="field-error" id="bioError"></div>
+            </div>
+
+            <div class="mb-2 col">
+                <label for="userName" class="form-label">이름</label>
+                <input type="text" class="form-control" id="userName" onkeyup="checkName()"
+                       th:field="*{userName}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{userName}"></div>
+                <div class="field-error" id="nameError"></div>
+            </div>
+        </form>
+        <div class="py-4 mb-5">
+            <button class="w-100 btn btn-primary" onclick="profileEditValidate()">프로필 수정</button>
+        </div>
+    </div>
+</div>
+
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/user/chkName.js"></script>
+<script src="/js/user/chkBio.js"></script>
+<script src="/js/user/profileBioEdit.js"></script>
+</body>
+</html>

@@ -9,14 +9,13 @@ import com.project.board.user.service.UserService;
 import com.project.board.user.validation.JoinFormDtoValidator;
 import com.project.board.user.validation.ValidationSequenceGroups;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final JoinFormDtoValidator joinFormDtoValidator;
     private final EmailToUserServiceImpl emailToUserService;
+    private final ModelMapper modelMapper;
 
     @InitBinder("joinFormDto")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -34,23 +34,26 @@ public class UserController {
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute(new JoinFormDto());
-        return "user/join";
+        return "user/form/join";
     }
 
     @PostMapping("/join")
     public String join(@Validated(ValidationSequenceGroups.ValidationSeq.class) @ModelAttribute JoinFormDto joinFormDto, Errors errors) {
 
         if (errors.hasErrors()) {
-            return "user/join";
+            return "user/form/join";
         }
 
-        User user = joinFormDto.mappingTo();
-
+        User user = modelMapper.map(joinFormDto,User.class);
         userService.join(user);
 
-        return "redirect:/tmp";
+        return "redirect:/joinSuc";
     }
 
+    @GetMapping("/joinSuc")
+    public String joinSuc() {
+        return "/user/joinSuc";
+    }
 
     @GetMapping("/user/help/pwdInquiry")
     public String findPwdForm() {
@@ -66,6 +69,8 @@ public class UserController {
 
         User foundUser = userService.findUserByEmail(email);
 
+        boolean equals = foundUser.getUserId().equals(userId);
+
         if (foundUser.getUserName().equals(userName)&&
                 foundUser.getUserId().equals(userId)) {
 
@@ -75,8 +80,9 @@ public class UserController {
             return "user/help/returnPwd";
         }
 
-        return "/error";
+        throw new IllegalArgumentException("입력한 계정정보와 접근하려는 계정정보가 불일치");
     }
+
     @GetMapping("/user/help/idInquiry")
     public String findIdForm(@ModelAttribute EmailWithName emailWithName) {
         return "user/help/idInquiry";
@@ -95,38 +101,18 @@ public class UserController {
             return "user/help/returnId";
         }
 
-        return "/error";
+        throw new IllegalArgumentException("입력한 계정정보와 접근하려는 계정정보가 불일치");
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model) {
-        return "user/login";
-    }
+    public String loginForm(@RequestParam(value = "error",required = false) String error, Model model) {
 
-    @GetMapping("/profile/{userId}")
-    public String userProfile(@PathVariable String userId, Principal principal, Model model) {
-
-        User findUser = userService.findUserByUserId(userId);
-
-        if (findUser == null) {
-            throw new IllegalArgumentException(userId + "라는 유저는 존재하지 않습니다");
+        if(error != null && error.equals("InvalidIdOrPwd")) {
+            model.addAttribute("errMsg", "아이디나 비밀번호가 틀렸습니다");
+        }else if(error != null && error.equals("InvalidId")){
+            model.addAttribute("errMsg", "아이디가 존재하지 않습니다");
         }
-
-        model.addAttribute("user", findUser);
-        model.addAttribute("isItYou", false);
-
-        if (userId.equals(principal.getName())) {
-            model.addAttribute("isItYou", true);
-
-            return "user/profile";
-        }
-
-        return "user/profile";
-    }
-
-    @GetMapping("/tmp")
-    public String tmpTest() {
-        return "user/tmp";
+        return "user/form/login";
     }
 
 }

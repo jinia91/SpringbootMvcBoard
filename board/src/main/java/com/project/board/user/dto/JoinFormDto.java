@@ -38,15 +38,4 @@ public class JoinFormDto {
     @Size(max = 50, message = "이메일이 적절하지 않습니다", groups = Third.class)
     private String email;
 
-    public User mappingTo(){
-        User user = new User();
-        user.setUserId(this.userId);
-        user.setUserPwd(this.userPwd);
-        user.setUserName(this.userName);
-        user.setEmail(this.email);
-        user.setBirthDate(this.birthDate);
-
-        return user;
-    }
-
 }

@@ -26,4 +26,6 @@ public interface MybatisUserRepositoryImpl extends UserRepository {
     @Update("Update User set userPwd = #{userPwd} where userId = #{userId}")
     void updatePwd(User user);
 
+    @Update("Update User set bio = #{bio}, userName =#{userName} where userId = #{userId}")
+    void updateUserBioAndName(User user);
 }
