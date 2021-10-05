@@ -28,7 +28,7 @@ public class EmailToUserServiceImpl {
 
         log.info("보내는 메일주소 ={}", emailAddress);
         log.info("인증번호 ={}", authNum);
-//        javaMailSender.send(mailMessage);
+        javaMailSender.send(mailMessage);
 
         return authNum;
     }
@@ -42,7 +42,7 @@ public class EmailToUserServiceImpl {
 
         log.info("보내는 메일주소 ={}", email);
         log.info("임시 비번 ={}", pwd);
-//        javaMailSender.send(mailMessage);
+        javaMailSender.send(mailMessage);
     }
 
 

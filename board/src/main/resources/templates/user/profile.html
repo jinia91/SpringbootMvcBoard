@@ -30,7 +30,7 @@
             <h1 class="display-4 " th:text="${user.userId}"></h1>
             <p class="lead" th:if="${!#strings.isEmpty(user.bio)}" th:text="${user.bio}"></p>
             <p class="lead" th:if="${#strings.isEmpty(user.bio) && isItYou}">
-                자기 소개를 넣어주세요!
+                자기 소개를 넣어주세요
             </p>
         </div>
 
@@ -67,6 +67,7 @@
                     <a th:href="|@{/profile/{userId}/edit/pwd(userId=${user.userId})}  |" th:if="${isItYou}"
                        class="btn btn-primary">비밀번호 변경</a>
                 </div>
+
             </div>
         </div>
     </div>

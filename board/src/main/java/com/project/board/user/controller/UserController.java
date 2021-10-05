@@ -69,8 +69,6 @@ public class UserController {
 
         User foundUser = userService.findUserByEmail(email);
 
-        boolean equals = foundUser.getUserId().equals(userId);
-
         if (foundUser.getUserName().equals(userName)&&
                 foundUser.getUserId().equals(userId)) {
 

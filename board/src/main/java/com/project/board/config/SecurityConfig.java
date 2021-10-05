@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 API
         http
                 .authorizeRequests()
-                    .mvcMatchers("/joinSuc","/*","/join","/login*", "/join/sendEmail", "/tmp","/user/help/**")
+                    .mvcMatchers("/board/list","/joinSuc","/*","/join","/login*", "/join/sendEmail","/user/help/**")
                     .permitAll()
                     .mvcMatchers(HttpMethod.GET).permitAll()
                     .anyRequest().authenticated();
