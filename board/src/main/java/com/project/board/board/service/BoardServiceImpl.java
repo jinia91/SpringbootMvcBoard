@@ -22,4 +22,19 @@ public class BoardServiceImpl {
     public Map<String, Integer> getArticleTotalCnt(){
         return boardRepository.getArticleTotalCnt();
     }
+
+    public int postNewArticle(Article article) {
+
+        boardRepository.writeArticle(article);
+
+        return article.getArticleUid();
+
+    }
+
+    public Article findArticle(int articleId) {
+
+        return boardRepository.getArticle(articleId);
+
+
+    }
 }

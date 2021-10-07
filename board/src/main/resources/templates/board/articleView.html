@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${article.getTitle()}"></title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+</head>
+
+
+<body class="bg-light">
+
+
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row justify-content-center mt-5 mb-3">
+        <div class="col">
+            <a class="btn btn-primary float-end"
+               th:href="@{/board/editArticle/{articleId}(articleId=${article.getArticleUid()})}"
+               type="button">게시물 수정
+            </a>
+            <div class="mt-5 mb-5">
+                <h1 th:text="${article.getTitle()}"></h1>
+            </div>
+            <textarea th:text="${article.getContents()}" name="contents" id="contents" hidden></textarea>
+
+            <div id="viewer"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="/js/user/getCsrfToken.js"></script>
+<script src="/js/user/viewer.js"></script>
+</html>

@@ -41,9 +41,7 @@ class MybatisBoardRepositoryImplTest {
     // given
         PagingHandler pi = new PagingHandler();
 
-
     // when
-
         List<Article> list = mybatisBoardRepository.getList(pi);
 
         // then

@@ -27,6 +27,7 @@ public class PagingBoxHandler {
 
         if (endPage > lastPage) {
             endPage = lastPage;
+            if(lastPage == 0) endPage =1;
         }
 
         if(pagingHandler.getCurPage()%displayPageNum == 0){

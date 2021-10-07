@@ -39,3 +39,6 @@ out/
 
 ### NPM ###
 src/main/resources/static/node_modules
+
+### ImgServer ###
+src/main/resources/static/uploadimgserver

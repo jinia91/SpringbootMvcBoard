@@ -30,11 +30,10 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-primary float-end"
-                    th:onclick=""
-                    onclick=""
+            <a class="btn btn-primary float-end"
+                    th:href="@{/board/writeArticle}"
                     type="button">게시물 등록
-            </button>
+            </a>
 
             <div class="dropdown float-end">
                 <button class="btn btn-primary-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
@@ -66,7 +65,7 @@
             <tbody>
             <tr th:each="article : ${articles}">
                 <td th:text="${article.getArticleUid()}"> 글번호</td>
-                <td><a th:href="@{#}" th:text="${article.getTitle()}"> 제목 </a></td>
+                <td><a th:href="@{/board/{articleId}(articleId=${article.getArticleUid()})}" th:text="${article.getTitle()}"> 제목 </a></td>
                 <td><a th:href="@{#}" th:text="${article.getWriterId()}">글쓴이</a></td>
                 <td th:text="${article.getWrittenDate()}">작성일</td>
                 <td th:text="${article.getHit()}">조회</td>
@@ -84,10 +83,10 @@
                      lastPage = ${pageTool.getLastPage()},
                      dispPgNum = ${pageTool.getDisplayPageNum()}">
 
-            <li th:if="${curPage>10}" class="page-item">
+            <li th:if="${curPage>dispPgNum}" class="page-item">
                 <a class="page-link" th:href="@{/board/list(listNum=(${listNum}))}">처음</a>
             </li>
-            <li th:if="${curPage>10}" class="page-item">
+            <li th:if="${curPage>dispPgNum}" class="page-item">
                 <a class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=(${curPage}-${dispPgNum}))}">이전</a>
             </li>
             <th:block th:each="page: ${#numbers.sequence(start,end)}">

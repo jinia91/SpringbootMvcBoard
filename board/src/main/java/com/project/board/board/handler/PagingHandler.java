@@ -51,6 +51,7 @@ public class PagingHandler {
             articleCntInAPage== 100) {
             this.offSet = (this.curPage - 1) * articleCntInAPage;
             this.articleCntInAPage = articleCntInAPage;
+
         }
     }
 

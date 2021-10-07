@@ -12,4 +12,5 @@ public interface BoardRepository {
     List<Article> getList(PagingHandler pagingHandler);
     void writeArticle(Article article);
     Map<String, Integer> getArticleTotalCnt();
+    Article getArticle(int articleId);
 }
