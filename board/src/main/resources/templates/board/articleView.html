@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row justify-content-center mt-5 mb-3">
         <div class="col">
-            <a class="btn btn-primary float-end"
+            <a sec:authorize="isAuthenticated()" class="btn btn-primary float-end"
                th:href="@{/board/editArticle/{articleId}(articleId=${article.getArticleUid()})}"
                type="button">게시물 수정
             </a>

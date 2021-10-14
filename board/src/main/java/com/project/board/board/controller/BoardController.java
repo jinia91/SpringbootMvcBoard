@@ -22,6 +22,7 @@ public class BoardController {
     private final BoardServiceImpl boardService;
     private final ModelMapper modelMapper;
 
+
     @GetMapping("/board/list")
     public String getBoardList(@RequestParam(required = false) Integer page,
                                @RequestParam(required = false) Integer listNum,
@@ -43,10 +44,15 @@ public class BoardController {
     }
 
     @GetMapping("/board/editArticle/{articleId}")
-    public String editArticleForm(@PathVariable int articleId, Model model){
+    public String editArticleForm(@PathVariable int articleId,Principal principal, Model model){
 
         Article article = boardService.findArticle(articleId);
-        ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
+
+        if(principal.getName() != article.getWriterId()){
+            new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        }
+
+            ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
         model.addAttribute(articleDto);
         return "board/articleEditForm";
     }
@@ -56,15 +62,32 @@ public class BoardController {
     public String writeArticle(@ModelAttribute ArticleDto articleDto, Principal principal){
 
         String userId = principal.getName();
+        articleDto.setWriterId(userId);
         Article article = modelMapper.map(articleDto, Article.class);
-        article.setWriterId(userId);
 
         int articleId = boardService.postNewArticle(article);
 
-        return "redirect:/board/" + articleId;
+
+
+
+        return "redirect:/board/article/" + articleId;
     }
 
-    @GetMapping("/board/{articleId}")
+    @PostMapping("/board/editArticle/{articleId}")
+    public String editArticle(@PathVariable int articleId, @ModelAttribute ArticleDto articleDto, Principal principal){
+
+        if(principal.getName() != articleDto.getWriterId()){
+            new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        }
+
+        Article article = modelMapper.map(articleDto, Article.class);
+        boardService.editArticle(article);
+        return "redirect:/board/" + articleId;
+
+
+    }
+
+    @GetMapping("/board/article/{articleId}")
     public String readArticle(@PathVariable int articleId, Model model){
 
         Article findArticle =boardService.findArticle(articleId);
@@ -73,12 +96,15 @@ public class BoardController {
     }
 
 
+
+
     private void buildPagingTool(Integer page, Integer listNum, PagingHandler pagingHandler, PagingBoxHandler pagingBoxHandler) {
         pagingHandler.setCurPage(page);
         pagingHandler.setArticleCntInAPage(listNum);
         Map<String, Integer> articleTotalCnt = boardService.getArticleTotalCnt();
         pagingBoxHandler.buildPagingBox(pagingHandler, articleTotalCnt.get("totalCnt"));
     }
+
 
 
 }

@@ -32,6 +32,9 @@ dependencies {
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
 
 
+	implementation group: 'org.kohsuke', name: 'github-api', version: '1.133'
+
+
 	implementation 'com.github.node-gradle:gradle-node-plugin:3.1.0'
 
 

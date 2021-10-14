@@ -30,7 +30,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary float-end"
+            <a sec:authorize="isAuthenticated()" class="btn btn-primary float-end"
                     th:href="@{/board/writeArticle}"
                     type="button">게시물 등록
             </a>
@@ -65,8 +65,8 @@
             <tbody>
             <tr th:each="article : ${articles}">
                 <td th:text="${article.getArticleUid()}"> 글번호</td>
-                <td><a th:href="@{/board/{articleId}(articleId=${article.getArticleUid()})}" th:text="${article.getTitle()}"> 제목 </a></td>
-                <td><a th:href="@{#}" th:text="${article.getWriterId()}">글쓴이</a></td>
+                <td><a th:href="@{/board/article/{articleId}(articleId=${article.getArticleUid()})}" th:text="${article.getTitle()}"> 제목 </a></td>
+                <td><a th:href="@{/profile/{writerId}(writerId=${article.getArticleUid()})}" th:text="${article.getWriterId()}">글쓴이</a></td>
                 <td th:text="${article.getWrittenDate()}">작성일</td>
                 <td th:text="${article.getHit()}">조회</td>
                 <td></td>

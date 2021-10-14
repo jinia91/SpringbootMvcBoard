@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("uploadimgserver/**","js/**","/js/user/**","/node_modules/**","/resources/**","/favicon.ico")
+                .antMatchers("/images/**","js/**","/js/user/**","/node_modules/**","/resources/**","/favicon.ico")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -42,10 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 API
         http
                 .authorizeRequests()
-                    .mvcMatchers("/board/editArticle/**","/images/**","/board/**","/joinSuc","/**","/join",
-                            "/login*", "/join/sendEmail","/user/help/**,/board/uploadImg")
+                    .mvcMatchers("/board/writeArticleWithGit","board/article/*","/board/list*",
+                                "/joinSuc","/join","/join/sendEmail",
+                                "/login*","/user/help/**")
                     .permitAll()
-                    .mvcMatchers(HttpMethod.GET).permitAll()
+//                    .mvcMatchers(HttpMethod.GET).permitAll()
                     .anyRequest().authenticated();
 
         // 인증 API

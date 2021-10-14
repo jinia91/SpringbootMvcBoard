@@ -1,5 +1,9 @@
-package com.project.board.file;
+package com.project.board.file.repository;
 
+import com.project.board.file.domain.UploadedImg;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +17,11 @@ public class FileStore {
 
     @Value("${file.dir}")
     private String fileDir;
+    @Value("${git.gitToken}")
+    private String gitToken;
+    @Value("${git.imgRepo}")
+    private String gitRepo;
+
 
     public String getFullPath(String filename) {
         return fileDir + filename;
@@ -23,9 +32,20 @@ public class FileStore {
             return null;
         }
 
+        //
+        GitHub gitHub = new GitHubBuilder().withOAuthToken(gitToken).build();
+        GHRepository repository = gitHub.getRepository(gitRepo);
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+        repository.createContent().path("img/"+storeFileName)
+                .content(multipartFile.getBytes()).message("test").branch("main").commit();
+        //
+
+
+
+//        String originalFilename = multipartFile.getOriginalFilename();
+//        String storeFileName = createStoreFileName(originalFilename);
+//        multipartFile.transferTo(new File(getFullPath(storeFileName)));
         return new UploadedImg(originalFilename, storeFileName);
 
 

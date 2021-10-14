@@ -1,4 +1,4 @@
-package com.project.board.file;
+package com.project.board.file.dto;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

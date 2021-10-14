@@ -37,4 +37,10 @@ public class BoardServiceImpl {
 
 
     }
+
+    public void editArticle(Article article) {
+
+        boardRepository.updateArticle(article);
+
+    }
 }

@@ -52,23 +52,23 @@ class MybatisBoardRepositoryImplTest {
 
     }
 
-    @Test
-    @DisplayName("페이징 테스트V2")
-    public void pagingTestV2() throws Exception {
-        // given
-        PagingHandler pi = new PagingHandler();
-        pi.setOffSet(2600280);
-
-        // when
-        List<Article> list = mybatisBoardRepository.getList(pi);
-
-        // then
-        for (Article article : list) {
-            System.out.println("articleUid = " + article.getArticleUid());
-        }
-        Assertions.assertThat(list.size()).isEqualTo(10);
-
-    }
+//    @Test
+//    @DisplayName("페이징 테스트V2")
+//    public void pagingTestV2() throws Exception {
+//        // given
+//        PagingHandler pi = new PagingHandler();
+//        pi.setOffSet(2600280);
+//
+//        // when
+//        List<Article> list = mybatisBoardRepository.getList(pi);
+//
+//        // then
+//        for (Article article : list) {
+//            System.out.println("articleUid = " + article.getArticleUid());
+//        }
+//        Assertions.assertThat(list.size()).isEqualTo(10);
+//
+//    }
 
 
 

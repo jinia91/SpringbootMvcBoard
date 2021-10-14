@@ -1,4 +1,4 @@
-package com.project.board.file;
+package com.project.board.file.domain;
 
 import lombok.Data;
 

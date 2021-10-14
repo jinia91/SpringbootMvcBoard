@@ -33,4 +33,11 @@ public interface MybatisBoardRepositoryImpl extends BoardRepository {
     @Select("select totalCnt from boardATotalCnt")
     Map<String, Integer> getArticleTotalCnt();
 
+    @Update("Update BoardA " +
+            "set (title, contents) = (#{title},#{contents}) " +
+            "where articleUid = #{articleUid}")
+    void updateArticle(Article article);
+
+
+
 }

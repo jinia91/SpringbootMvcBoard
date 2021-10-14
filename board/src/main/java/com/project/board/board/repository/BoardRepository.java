@@ -13,4 +13,5 @@ public interface BoardRepository {
     void writeArticle(Article article);
     Map<String, Integer> getArticleTotalCnt();
     Article getArticle(int articleId);
+    void updateArticle(Article article);
 }
