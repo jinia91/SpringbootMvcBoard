@@ -2,6 +2,7 @@ package com.project.board.board.repository;
 
 import com.project.board.board.domain.Article;
 import com.project.board.board.handler.PagingHandler;
+import net.bytebuddy.utility.RandomString;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class MybatisBoardRepositoryImplTest {
 //    @Test
 //    public void dummyDataInsert() throws Exception {
 //    // given
-//        for(int i =0; i<2000000; i++){
+//        for(int i =0; i<132; i++){
 //            Article article = new Article();
 //            article.setTitle("더미데이터"+ RandomString.make(8));
 //            article.setContents(RandomString.make(8));
@@ -29,10 +30,10 @@ class MybatisBoardRepositoryImplTest {
 //
 //            mybatisBoardRepository.writeArticle(article);
 //        }
-//
-//    // when
-//
-//    // then
+
+    // when
+
+    // then
 //    }
 
     @Test

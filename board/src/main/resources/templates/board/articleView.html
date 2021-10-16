@@ -19,16 +19,31 @@
 <div class="container">
     <div class="row justify-content-center mt-5 mb-3">
         <div class="col">
-            <a sec:authorize="isAuthenticated()" class="btn btn-primary float-end"
-               th:href="@{/board/editArticle/{articleId}(articleId=${article.getArticleUid()})}"
-               type="button">게시물 수정
-            </a>
-            <div class="mt-5 mb-5">
-                <h1 th:text="${article.getTitle()}"></h1>
+
+            <div class="mt-5">
+                <h2 th:text="${article.getTitle()}"></h2>
+            </div>
+
+            <div class="row">
+                <div class="col-2 fw-lighter" th:text="${article.getWriterId()}">글쓴이</div>
+                <div class="col-2 fw-lighter" th:text="${article.getWrittenDate()}">작성일</div>
+                <div class="col text-end fw-lighter" th:text="|조회 ${article.getHit()}|">조회수</div>
             </div>
             <textarea th:text="${article.getContents()}" name="contents" id="contents" hidden></textarea>
 
-            <div id="viewer"></div>
+            <div class="mb-5 mt-5" id="viewer"></div>
+
+            <div class="d-flex justify-content-between">
+                <a sec:authorize="isAuthenticated()" th:if="${isItYou}" class="btn btn-primary"
+                   th:href="@{/board/editArticle/{articleId}(articleId=${article.getArticleUid()})}"
+                   type="button">수정
+                </a>
+                <a sec:authorize="isAuthenticated()" th:if="${isItYou}" class="btn btn-primary"
+                   th:href="@{/board/deleteArticle/{articleId}(articleId=${article.getArticleUid()})}"
+                   type="button">삭제
+                </a>
+            </div>
+
         </div>
     </div>
 </div>

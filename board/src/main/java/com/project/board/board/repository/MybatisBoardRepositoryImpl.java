@@ -27,17 +27,20 @@ public interface MybatisBoardRepositoryImpl extends BoardRepository {
     @Options(useGeneratedKeys = true, keyProperty = "articleUid")
     void writeArticle(Article article);
 
-    @Select("select * from boardA where articleUid = #{articleUid}")
+    @Select("select * from boardA where articleUid = #{articleId}")
     Article getArticle(int articleId);
 
     @Select("select totalCnt from boardATotalCnt")
     Map<String, Integer> getArticleTotalCnt();
 
     @Update("Update BoardA " +
-            "set (title, contents) = (#{title},#{contents}) " +
+            "set title = #{title}, contents = #{contents} " +
             "where articleUid = #{articleUid}")
     void updateArticle(Article article);
 
-
+    @Delete("Delete  " +
+            "From BoardA " +
+            "where articleUid = #{articleId}")
+    void deleteArticle(int articleId);
 
 }

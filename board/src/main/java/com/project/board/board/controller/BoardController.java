@@ -48,8 +48,8 @@ public class BoardController {
 
         Article article = boardService.findArticle(articleId);
 
-        if(principal.getName() != article.getWriterId()){
-            new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        if(!principal.getName().equals(article.getWriterId())){
+            throw new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
         }
 
             ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
@@ -68,34 +68,59 @@ public class BoardController {
         int articleId = boardService.postNewArticle(article);
 
 
-
-
         return "redirect:/board/article/" + articleId;
     }
 
     @PostMapping("/board/editArticle/{articleId}")
     public String editArticle(@PathVariable int articleId, @ModelAttribute ArticleDto articleDto, Principal principal){
 
-        if(principal.getName() != articleDto.getWriterId()){
-            new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
-        }
 
         Article article = modelMapper.map(articleDto, Article.class);
+        article.setArticleUid(articleId);
         boardService.editArticle(article);
-        return "redirect:/board/" + articleId;
+        return "redirect:/board/article/" + articleId;
 
 
     }
 
     @GetMapping("/board/article/{articleId}")
-    public String readArticle(@PathVariable int articleId, Model model){
+    public String readArticle(@PathVariable int articleId, Principal principal, Model model){
 
         Article findArticle =boardService.findArticle(articleId);
+
+        if(principal == null||!principal.getName().equals(findArticle.getWriterId())){
+            model.addAttribute("isItYou", false);
+        }
+        else{
+            model.addAttribute("isItYou", true);
+        }
         model.addAttribute(findArticle);
         return "board/articleView";
     }
 
+    @GetMapping("/board/deleteArticle/{articleId}")
+    public String deleteArticleForm(@PathVariable int articleId, Principal principal, Model model){
 
+        Article article = boardService.findArticle(articleId);
+        if(!principal.getName().equals(article.getWriterId())){
+            throw new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        }
+
+        model.addAttribute("articleId",articleId);
+
+        return "/board/deleteArticleConfirmForm";
+
+    }
+
+    @PostMapping("/board/deleteArticle/{articleId}")
+    public String deleteArticle(@PathVariable int articleId, Principal principal){
+
+        boardService.deleteArticle(articleId);
+
+        return "redirect:/board/list";
+
+
+    }
 
 
     private void buildPagingTool(Integer page, Integer listNum, PagingHandler pagingHandler, PagingBoxHandler pagingBoxHandler) {
@@ -104,7 +129,6 @@ public class BoardController {
         Map<String, Integer> articleTotalCnt = boardService.getArticleTotalCnt();
         pagingBoxHandler.buildPagingBox(pagingHandler, articleTotalCnt.get("totalCnt"));
     }
-
 
 
 }

@@ -14,4 +14,5 @@ public interface BoardRepository {
     Map<String, Integer> getArticleTotalCnt();
     Article getArticle(int articleId);
     void updateArticle(Article article);
+    void deleteArticle(int articleId);
 }

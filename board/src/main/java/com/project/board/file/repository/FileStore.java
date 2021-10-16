@@ -15,37 +15,26 @@ import java.util.UUID;
 @Component
 public class FileStore {
 
-    @Value("${file.dir}")
-    private String fileDir;
     @Value("${git.gitToken}")
     private String gitToken;
     @Value("${git.imgRepo}")
     private String gitRepo;
 
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
-    }
 
     public UploadedImg storeFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
             return null;
         }
 
-        //
         GitHub gitHub = new GitHubBuilder().withOAuthToken(gitToken).build();
         GHRepository repository = gitHub.getRepository(gitRepo);
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);
         repository.createContent().path("img/"+storeFileName)
                 .content(multipartFile.getBytes()).message("test").branch("main").commit();
-        //
 
 
-
-//        String originalFilename = multipartFile.getOriginalFilename();
-//        String storeFileName = createStoreFileName(originalFilename);
-//        multipartFile.transferTo(new File(getFullPath(storeFileName)));
         return new UploadedImg(originalFilename, storeFileName);
 
 

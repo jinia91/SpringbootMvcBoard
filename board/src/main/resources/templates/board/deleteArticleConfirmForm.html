@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>글삭제</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <style>
+        @media (min-width: 768px) {
+            .container {
+                width: 600px;
+            }
+        }
+
+        .field-error {
+            border-color: red;
+            color: red;
+        }
+
+        .field-error-solve {
+            border-color: blue;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+<nav th:replace="fragment/fragments.html :: navbar"></nav>
+
+<div class="container">
+    <div class="row">
+        <h2 class="py-3 mt-5 mb-2 text-center">정말 삭제하시겠습니까?</h2>
+        <hr size="3px">
+
+        <form method="post" th:action="@{/board/deleteArticle/{articleId}(articleId =${articleId})}" id="deleteArticleForm">
+
+            <div class="py-3">
+                <button class="w-100 btn btn-primary">확인</button>
+            </div>
+
+         </form>
+    </div>
+</div>
+
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

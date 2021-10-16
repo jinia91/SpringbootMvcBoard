@@ -109,7 +109,23 @@ function uploadImage(blob) {
 
 }
 
+function checkTitle() {
+
+    let title = document.getElementById("title");
+
+    if (title.value === "") {
+        return false;
+    }
+    return true;
+}
+
 function post(){
+
+    if(!checkTitle()){
+        alert("제목을 입력해주세요")
+        return;
+    }
+
  const getContentsMd = editor.getMarkdown();
  contents.value = getContentsMd;
  document.getElementById("writeArticleForm").submit();

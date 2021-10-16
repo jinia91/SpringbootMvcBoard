@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row justify-content-center mt-5 mb-3">
         <form class="col-12" method="post" enctype="multipart/form-data" th:object="${articleDto}"
-              th:action="@{/board/writeArticle}" id="writeArticleForm">
+              th:action="@{/board/editArticle/{articleId}(articleId =${articleDto.getArticleUid()} )}" id="writeArticleForm">
 
             <div class="form-group">
                 <input id="title" name="title" type="text" class="form-control"

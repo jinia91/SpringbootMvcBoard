@@ -43,4 +43,9 @@ public class BoardServiceImpl {
         boardRepository.updateArticle(article);
 
     }
+
+    public void deleteArticle(int articleId) {
+
+        boardRepository.deleteArticle(articleId);
+    }
 }

@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/images/**","js/**","/js/user/**","/node_modules/**","/resources/**","/favicon.ico")
+                .antMatchers("/images/**","js/**","/js/user/**","/node_modules/**","/resources/**","/favicon.ico"
+                            ,"/error")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

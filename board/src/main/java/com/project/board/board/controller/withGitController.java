@@ -12,14 +12,10 @@ import org.kohsuke.github.GitHubBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
