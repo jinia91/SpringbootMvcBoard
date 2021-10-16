@@ -48,4 +48,10 @@ public class BoardServiceImpl {
 
         boardRepository.deleteArticle(articleId);
     }
+
+    public void addHit(int articleId) {
+
+        boardRepository.updateHit(articleId);
+
+    }
 }

@@ -15,4 +15,5 @@ public interface BoardRepository {
     Article getArticle(int articleId);
     void updateArticle(Article article);
     void deleteArticle(int articleId);
+    void updateHit(int articleId);
 }

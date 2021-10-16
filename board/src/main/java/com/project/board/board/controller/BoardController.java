@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,6 @@ public class BoardController {
         return "board/articleEditForm";
     }
 
-
     @PostMapping("/board/writeArticle")
     public String writeArticle(@ModelAttribute ArticleDto articleDto, Principal principal){
 
@@ -84,7 +85,12 @@ public class BoardController {
     }
 
     @GetMapping("/board/article/{articleId}")
-    public String readArticle(@PathVariable int articleId, Principal principal, Model model){
+    public String readArticle(@PathVariable int articleId,
+                              @CookieValue(required = false, name = "view") String cookie, HttpServletResponse response,
+                              Principal principal, Model model){
+
+        // 쿠키 사용 조회수 증가
+        addHitWithCookie(articleId, cookie, response);
 
         Article findArticle =boardService.findArticle(articleId);
 
@@ -128,6 +134,32 @@ public class BoardController {
         pagingHandler.setArticleCntInAPage(listNum);
         Map<String, Integer> articleTotalCnt = boardService.getArticleTotalCnt();
         pagingBoxHandler.buildPagingBox(pagingHandler, articleTotalCnt.get("totalCnt"));
+    }
+
+    private void addHitWithCookie(int articleId, String cookie, HttpServletResponse response) {
+        if(cookie == null) {
+            Cookie viewCookie = new Cookie("view", articleId +"/");
+            viewCookie.setComment("게시물 조회 확인용");
+            viewCookie.setMaxAge(60 * 60);
+            boardService.addHit(articleId);
+            response.addCookie(viewCookie);
+        }
+
+        else{
+            boolean isRead =false;
+            String[] viewCookieList = cookie.split("/");
+            for (String alreadyRead : viewCookieList) {
+                if(alreadyRead.equals(String.valueOf(articleId))){
+                    isRead = true;
+                    break;
+                };
+            }
+            if(!isRead){
+                cookie += articleId +"/";
+                boardService.addHit(articleId);
+            }
+            response.addCookie(new Cookie("view", cookie));
+        }
     }
 
 

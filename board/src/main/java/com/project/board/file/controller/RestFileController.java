@@ -15,9 +15,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class RestFileController {
 
-    @Value("${file.url}")
-    private String fileUrl;
-
     @Value("${git.imgUrl}")
     private String imgUrl;
 

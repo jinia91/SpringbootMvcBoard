@@ -43,4 +43,10 @@ public interface MybatisBoardRepositoryImpl extends BoardRepository {
             "where articleUid = #{articleId}")
     void deleteArticle(int articleId);
 
+
+
+    @Update("Update BoardA " +
+            "set hit = hit+1 " +
+            "where articleUid = #{articleId}")
+    void updateHit(int articleId);
 }
