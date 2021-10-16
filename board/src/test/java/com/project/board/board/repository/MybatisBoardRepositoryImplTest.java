@@ -2,7 +2,6 @@ package com.project.board.board.repository;
 
 import com.project.board.board.domain.Article;
 import com.project.board.board.handler.PagingHandler;
-import net.bytebuddy.utility.RandomString;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +49,30 @@ class MybatisBoardRepositoryImplTest {
             System.out.println("articleUid = " + article.getArticleUid());
         }
         Assertions.assertThat(list.size()).isEqualTo(10);
+
+    }
+
+    @Test
+    @DisplayName("검색쿼리 작동 성공 테스트V1")
+    public void pagingWithSearchingTest() throws Exception {
+    // given
+        PagingHandler pi = new PagingHandler();
+
+        pi.setSearchType("title");
+        pi.setSearchKeyword("네트워크");
+
+        System.out.println("pi.getSearchKeyword() = " + pi.getSearchKeyword());
+        System.out.println("pi.getSearchKeyword() = " + pi.getSearchType());
+
+    // when
+        List<Article> list = mybatisBoardRepository.getListWithSearchCriteria(pi);
+
+        // then
+        for (Article article : list) {
+            System.out.println("articleUid = " + article.getArticleUid());
+        }
+
+        System.out.println(list.size());
 
     }
 

@@ -5,6 +5,8 @@ public class PagingHandler {
     private int curPage;
     private int articleCntInAPage;
     private int offSet;
+    private String searchType;
+    private String searchKeyword;
 
 
     // 최초 생성시 1페이지,이지당 10개 아티클 표시, offSet 0
@@ -61,6 +63,23 @@ public class PagingHandler {
 
     public void setOffSet(int offSet) {
         this.offSet = offSet;
+    }
+
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public String getSearchKeyword() {
+        return searchKeyword;
+    }
+
+    public void setSearchKeyword(String searchKeyword) {
+        this.searchKeyword = "%"+searchKeyword+"%";
     }
 
 

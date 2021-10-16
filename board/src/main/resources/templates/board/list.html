@@ -31,13 +31,14 @@
     <div class="row">
         <div class="col">
             <a sec:authorize="isAuthenticated()" class="btn btn-primary float-end"
-                    th:href="@{/board/writeArticle}"
-                    type="button">게시물 등록
+               th:href="@{/board/writeArticle}"
+               type="button">게시물 등록
             </a>
 
             <div class="dropdown float-end">
-                <button class="btn btn-primary-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
-                th:text="|${pageTool.getPagingIndex().getArticleCntInAPage()}개|">
+                <button class="btn btn-primary-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false"
+                        th:text="|${pageTool.getPagingIndex().getArticleCntInAPage()}개|">
                     50개
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
@@ -65,8 +66,10 @@
             <tbody>
             <tr th:each="article : ${articles}">
                 <td th:text="${article.getArticleUid()}"> 글번호</td>
-                <td><a th:href="@{/board/article/{articleId}(articleId=${article.getArticleUid()})}" th:text="${article.getTitle()}"> 제목 </a></td>
-                <td><a th:href="@{/profile/{writerId}(writerId=${article.getWriterId()})}" th:text="${article.getWriterId()}">글쓴이</a></td>
+                <td><a th:href="@{/board/article/{articleId}(articleId=${article.getArticleUid()})}"
+                       th:text="${article.getTitle()}"> 제목 </a></td>
+                <td><a th:href="@{/profile/{writerId}(writerId=${article.getWriterId()})}"
+                       th:text="${article.getWriterId()}">글쓴이</a></td>
                 <td th:text="${article.getWrittenDate()}">작성일</td>
                 <td th:text="${article.getHit()}">조회</td>
                 <td></td>
@@ -84,29 +87,65 @@
                      dispPgNum = ${pageTool.getDisplayPageNum()}">
 
             <li th:if="${curPage>dispPgNum}" class="page-item">
-                <a class="page-link" th:href="@{/board/list(listNum=(${listNum}))}">처음</a>
+                <a class="page-link"
+                   th:href="@{/board/list(listNum=(${listNum}),sType=(${param.sType}),sKeyword=(${param.sKeyword}))}">처음</a>
             </li>
             <li th:if="${curPage>dispPgNum}" class="page-item">
-                <a class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=(${curPage}-${dispPgNum}))}">이전</a>
+                <a class="page-link"
+                   th:href="@{/board/list(listNum=(${listNum}),page=(${curPage}-${dispPgNum}),sType=(${param.sType}),sKeyword=(${param.sKeyword}))}">이전</a>
             </li>
             <th:block th:each="page: ${#numbers.sequence(start,end)}">
                 <li th:if="${page==curPage}" class="page-item active">
-                    <a th:text="${page}" class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=${page})}"></a>
+                    <a th:text="${page}" class="page-link"
+                       th:href="@{/board/list(listNum=(${listNum}),page=${page},sType=(${param.sType}),sKeyword=(${param.sKeyword}))}"></a>
                 </li>
                 <li th:unless="${page==curPage}" class="page-item">
-                    <a th:text="${page}" class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=${page})}"></a>
+                    <a th:text="${page}" class="page-link"
+                       th:href="@{/board/list(listNum=(${listNum}),page=${page},sType=(${param.sType}),sKeyword=(${param.sKeyword}))}"></a>
                 </li>
             </th:block>
             <li th:if="${curPage<=totalEnd}" class="page-item">
-                <a class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=(${curPage}+${dispPgNum}))}">다음</a>
+                <a class="page-link"
+                   th:href="@{/board/list(listNum=(${listNum}),page=(${curPage}+${dispPgNum}),sType=(${param.sType}),sKeyword=(${param.sKeyword}))}">다음</a>
             </li>
             <li th:if="${curPage<=totalEnd}" class="page-item">
-                <a class="page-link" th:href="@{/board/list(listNum=(${listNum}),page=${lastPage})}">끝</a>
+                <a class="page-link"
+                   th:href="@{/board/list(listNum=(${listNum}),page=${lastPage},sType=(${param.sType}),sKeyword=(${param.sKeyword}))}">끝</a>
             </li>
         </ul>
+
+        <!--Search s-->
+        <div class="input-group row g-3 mb-3 justify-content-center">
+            <div class="col-auto">
+                <select class="form-select" id="searchType">
+                    <option value="contents">내용</option>
+                    <option value="writerId">글쓴이</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <input class="form-control" id="searchKeyword" type="text" onkeyup="if(window.event.keyCode==13){search()}"
+                th:value="${param.sKeyword}">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="button" onclick="search()">검색</button>
+            </div>
+        </div>
+        <!-- Search -->
+
+
     </div>
 </div> <!-- /container -->
 
 <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function search(){
+
+        let sType = document.getElementById("searchType").value;
+        let sKeyword = document.getElementById("searchKeyword").value;
+
+        location.href = "/board/list?sType=" +sType+"&sKeyword="+sKeyword;
+
+    }
+</script>
 </body>
 </html>

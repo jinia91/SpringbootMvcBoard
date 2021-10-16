@@ -16,4 +16,7 @@ public interface BoardRepository {
     void updateArticle(Article article);
     void deleteArticle(int articleId);
     void updateHit(int articleId);
+    List<Article> getListWithSearchCriteria(PagingHandler pagingHandler);
+    Map<String, Integer> getSearchedArticleCnt(PagingHandler pagingHandler);
+
 }

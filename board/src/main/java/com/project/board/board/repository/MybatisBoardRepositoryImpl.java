@@ -49,4 +49,24 @@ public interface MybatisBoardRepositoryImpl extends BoardRepository {
             "set hit = hit+1 " +
             "where articleUid = #{articleId}")
     void updateHit(int articleId);
+
+
+
+    @Select("select b.articleUid, b.contents, b.title, b.writerId, b.writtenDate, b.hit " +
+            "from ( " +
+            "select articleUid " +
+            "from boardA " +
+            "where ${searchType} like #{searchKeyword} " +
+            "order by articleUid desc " +
+            "limit #{articleCntInAPage} offset #{offSet}) a  " +
+            "join boardA b on (a.articleUid = b.articleUid) " +
+            "order by articleUid desc")
+    List<Article> getListWithSearchCriteria(PagingHandler pagingHandler);
+
+    @Select("select count(articleUid) as cnt " +
+            "from boardA " +
+            "where ${searchType} like #{searchKeyword} " +
+            "order by articleUid desc")
+    Map<String, Integer> getSearchedArticleCnt(PagingHandler pagingHandler);
+
 }

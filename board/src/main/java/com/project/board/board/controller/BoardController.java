@@ -28,11 +28,24 @@ public class BoardController {
     @GetMapping("/board/list")
     public String getBoardList(@RequestParam(required = false) Integer page,
                                @RequestParam(required = false) Integer listNum,
+                               @RequestParam(required = false) String sType,
+                               @RequestParam(required = false) String sKeyword,
                                PagingHandler pagingHandler, PagingBoxHandler pagingBoxHandler, Model model){
 
 
+
         buildPagingTool(page, listNum, pagingHandler, pagingBoxHandler);
-        List<Article> articleList = boardService.getBoardList(pagingHandler);
+
+        List<Article> articleList = null;
+        if(sType != null&&sKeyword != null&&!sType.equals("")&&!sKeyword.equals("")){
+            pagingHandler.setSearchType(sType);
+            pagingHandler.setSearchKeyword(sKeyword);
+            articleList = boardService.getBoardListWithSearching(pagingHandler);
+            pagingBoxHandler.buildPagingBox(pagingHandler, boardService.getSearchedArticleCnt(pagingHandler));
+        }
+        else{
+        articleList = boardService.getBoardList(pagingHandler);
+        }
 
         model.addAttribute("articles",articleList);
         model.addAttribute("pageTool", pagingBoxHandler);

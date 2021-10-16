@@ -54,4 +54,17 @@ public class BoardServiceImpl {
         boardRepository.updateHit(articleId);
 
     }
+
+    public List<Article> getBoardListWithSearching(PagingHandler pagingHandler) {
+
+        return boardRepository.getListWithSearchCriteria(pagingHandler);
+
+    }
+
+    public Integer getSearchedArticleCnt(PagingHandler pagingHandler) {
+
+        Map<String, Integer> searchedArticleCnt = boardRepository.getSearchedArticleCnt(pagingHandler);
+        Integer cnt = Integer.parseInt(String.valueOf(searchedArticleCnt.get("cnt")));
+        return cnt;
+    }
 }
