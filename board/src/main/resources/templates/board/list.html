@@ -15,6 +15,17 @@
             }
         }
 
+        @media (max-width: 575px) {
+            .hideCol {
+                display: none;
+                visibility: hidden;
+                width: 0%;
+            }
+            .smallCol{
+                font-size: small;
+            }
+        }
+
         .page-link {
             font-size: small;
         }
@@ -53,28 +64,37 @@
     </div>
     <hr class="my-4">
     <div>
-        <table class="table table-hover">
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
-                <th>글번호</th>
-                <th>제목</th>
-                <th>글쓴이</th>
-                <th>작성일</th>
-                <th>조회</th>
+                <th class="hideCol" th:text="번호">번호</th>
+                <th th:text="제목">제목</th>
+                <th th:text="작성자">글쓴이</th>
+                <th class="hideCol" th:text="작성일">작성일</th>
+                <th class="hideCol" th:text="조회">조회</th>
+
             </tr>
             </thead>
+
             <tbody>
             <tr th:each="article : ${articles}">
-                <td th:text="${article.getArticleUid()}"> 글번호</td>
+                <td th:text="${article.getArticleUid()}"
+                    class="hideCol"> 글번호</td>
                 <td><a th:href="@{/board/article/{articleId}(articleId=${article.getArticleUid()})}"
-                       th:text="${article.getTitle()}"> 제목 </a></td>
+                       th:text="${#strings.abbreviate(article.getTitle(),25)}"
+                       class="smallCol"
+                       style= "text-decoration:none; color:inherit;"> 제목 </a></td>
                 <td><a th:href="@{/profile/{writerId}(writerId=${article.getWriterId()})}"
-                       th:text="${article.getWriterId()}">글쓴이</a></td>
-                <td th:text="${article.getWrittenDate()}">작성일</td>
-                <td th:text="${article.getHit()}">조회</td>
-                <td></td>
+                       th:text="${article.getWriterId()}"
+                       class="smallCol"
+                       style= "text-decoration:none; color:inherit;">글쓴이</a></td>
+                <td th:text="${#temporals.format(article.getWrittenDate(),'yy-MM-dd')}"
+                        class="hideCol">작성일</td>
+                <td th:text="${article.getHit()}"
+                        class="hideCol">조회</td>
             </tr>
             </tbody>
+
         </table>
 
         <ul class="pagination pagination-sm justify-content-center"
@@ -118,13 +138,15 @@
         <div class="input-group row g-3 mb-3 justify-content-center">
             <div class="col-auto">
                 <select class="form-select" id="searchType">
+                    <option value="title">제목</option>
                     <option value="contents">내용</option>
                     <option value="writerId">글쓴이</option>
                 </select>
             </div>
-            <div class="col-auto">
-                <input class="form-control" id="searchKeyword" type="text" onkeyup="if(window.event.keyCode==13){search()}"
-                th:value="${param.sKeyword}">
+            <div class="col-4">
+                <input class="form-control" id="searchKeyword" type="text"
+                       onkeyup="if(window.event.keyCode==13){search()}"
+                       th:value="${param.sKeyword}">
             </div>
             <div class="col-auto">
                 <button class="btn btn-primary" type="button" onclick="search()">검색</button>
@@ -138,12 +160,12 @@
 
 <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function search(){
+    function search() {
 
         let sType = document.getElementById("searchType").value;
         let sKeyword = document.getElementById("searchKeyword").value;
 
-        location.href = "/board/list?sType=" +sType+"&sKeyword="+sKeyword;
+        location.href = "/board/list?sType=" + sType + "&sKeyword=" + sKeyword;
 
     }
 </script>

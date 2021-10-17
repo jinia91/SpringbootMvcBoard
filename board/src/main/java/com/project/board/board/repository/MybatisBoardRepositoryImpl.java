@@ -21,9 +21,9 @@ public interface MybatisBoardRepositoryImpl extends BoardRepository {
     List<Article> getList(PagingHandler pagingHandler);
 
     @Insert("Insert into boardA" +
-                "(title, writerId,contents)" +
+            "(title, writerId,contents)" +
             "values" +
-                "(#{title},#{writerId},#{contents})")
+            "(#{title},#{writerId},#{contents})")
     @Options(useGeneratedKeys = true, keyProperty = "articleUid")
     void writeArticle(Article article);
 

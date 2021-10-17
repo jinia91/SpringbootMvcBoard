@@ -16,7 +16,7 @@
 
 <nav th:replace="fragment/fragments.html :: navbar"></nav>
 
-<div class="container">
+<div class="container mb-5">
     <div class="row justify-content-center mt-5 mb-3">
         <div class="col">
 
@@ -25,10 +25,13 @@
             </div>
 
             <div class="row">
-                <div class="col-2 fw-lighter" th:text="${article.getWriterId()}">글쓴이</div>
-                <div class="col-2 fw-lighter" th:text="${article.getWrittenDate()}">작성일</div>
+                <div class="col-4 col-sm-auto fw-lighter" th:text="${article.getWriterId()}">글쓴이</div>
+                <div class="col-4 col-sm-auto fw-lighter" th:text="${article.getWrittenDate()}">작성일</div>
                 <div class="col text-end fw-lighter" th:text="|조회 ${article.getHit()}|">조회수</div>
             </div>
+
+            <hr style="border: solid 1px;">
+
             <textarea th:text="${article.getContents()}" name="contents" id="contents" hidden></textarea>
 
             <div class="mb-5 mt-5" id="viewer"></div>
@@ -43,7 +46,28 @@
                    type="button">삭제
                 </a>
             </div>
+            <hr style="border: solid 1px;">
 
+            <!--reply-->
+            <div class="container">
+                <div class="replyList" id="replyList"></div>
+            </div>
+
+            <!--reply write form-->
+            <div class="container">
+                <form name="replyWriteForm" sec:authorize="isAuthenticated()">
+                    <div class="input-group">
+                        <textarea type="text" class="form-control" id="replyContent" name="replyContent" style="resize:none"></textarea>
+                        <div class="input-group-btn" >
+                            <button class="btn btn-primary" type="button" name="commentInsertBtn"
+                                    style="height: 100px" onclick="replyWrite()">등록
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--            -->
+            <!--reply-->
         </div>
     </div>
 </div>
@@ -53,4 +77,103 @@
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="/js/user/getCsrfToken.js"></script>
 <script src="/js/user/viewer.js"></script>
+<script src="/js/user/getCsrfToken.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded",
+        function() {
+
+            const replyBox = document.getElementById("replyList");
+            let token = getCsrfToken();
+            const xhr = new XMLHttpRequest();
+
+            let articleId = [[${article.getArticleUid()}]];
+            xhr.open("GET", "/reply/list/" + articleId);
+            xhr.setRequestHeader("X-XSRF-TOKEN", token);
+            xhr.send();
+
+            xhr.onload = () => {
+
+                if (xhr.status === 200||xhr.status === 201||xhr.status === 202) {
+                    let list = JSON.parse(xhr.response);
+
+                    console.log(list);
+
+                    for (const reply of list) {
+                        let replyHtmlSource = ' ';
+                        replyHtmlSource += '<div class="" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                        replyHtmlSource += '<div style="display: flex; flex-direction: row-reverse; font-size: small">';
+
+                        reply.replyWrittenDate[1] = reply.replyWrittenDate[1]-1;
+                        let date = moment(reply.replyWrittenDate).format('YY-MM-DD HH:mm:ss');
+                        replyHtmlSource += '<div>'+ date + '</div>';
+                        if (reply.replyWriterId === [[${#authentication.name}]]){
+                        replyHtmlSource += '<div style="flex-basis: 50px"><a href="#">삭제</a></div>';
+                        }
+                        replyHtmlSource += '</div>';
+                        replyHtmlSource += '<div style="display: flex; flex-direction: row">';
+                        replyHtmlSource += '<div style="flex-basis: 100px">'+reply.replyWriterId+'</div>';
+                        replyHtmlSource += '<div>'+reply.replyContents+'</div>';
+                        replyHtmlSource += '</div>';
+                        replyHtmlSource += '</div>';
+
+                        replyBox.innerHTML += replyHtmlSource;
+                    }
+                }
+            }
+
+
+        }
+    );
+
+ function replyWrite(){
+     let token = getCsrfToken();
+     const xhr = new XMLHttpRequest();
+
+     let contents = {contents: document.getElementById("replyContent").value};
+
+     xhr.open("POST", "/reply/writeReply/"+[[${article.getArticleUid()}]]);
+     xhr.setRequestHeader("content-type", "application/json");
+     xhr.setRequestHeader("X-XSRF-TOKEN", token);
+     xhr.send(JSON.stringify(contents));
+     const replyBox = document.getElementById("replyList");
+
+
+     xhr.onload = () => {
+
+         if (xhr.status === 200 || xhr.status === 201 || xhr.status === 202) {
+             document.getElementById("replyContent").value='';
+
+             let list = JSON.parse(xhr.response);
+
+             replyBox.innerHTML = '';
+
+             console.log(list);
+
+             for (const reply of list) {
+                 let replyHtmlSource = ' ';
+                 replyHtmlSource += '<div class="" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                 replyHtmlSource += '<div style="display: flex; flex-direction: row-reverse; font-size: small">';
+                 reply.replyWrittenDate[1] = reply.replyWrittenDate[1]-1;
+                 let date = moment(reply.replyWrittenDate).format('YY-MM-DD HH:mm:ss');
+                 replyHtmlSource += '<div>' + date + '</div>';
+                 if (reply.replyWriterId === [[${#authentication.name}]]) {
+                     replyHtmlSource += '<div style="flex-basis: 50px"><a href="#">삭제</a></div>';
+                 }
+                 replyHtmlSource += '</div>';
+                 replyHtmlSource += '<div style="display: flex; flex-direction: row">';
+                 replyHtmlSource += '<div style="flex-basis: 100px">' + reply.replyWriterId + '</div>';
+                 replyHtmlSource += '<div>' + reply.replyContents + '</div>';
+                 replyHtmlSource += '</div>';
+                 replyHtmlSource += '</div>';
+
+                 replyBox.innerHTML += replyHtmlSource;
+
+             }
+         }
+
+     }
+ }
+
+</script>
 </html>

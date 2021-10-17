@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .mvcMatchers("/board/writeArticleWithGit","board/article/*","/board/list*",
                                 "/joinSuc","/join","/join/sendEmail",
-                                "/login*","/user/help/**")
+                                "/login*","/user/help/**","/reply/*", "/reply/list/*")
                     .permitAll()
 //                    .mvcMatchers(HttpMethod.GET).permitAll()
                     .anyRequest().authenticated();
