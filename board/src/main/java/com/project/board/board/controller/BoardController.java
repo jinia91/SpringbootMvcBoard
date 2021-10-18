@@ -63,6 +63,7 @@ public class BoardController {
 
         Article article = boardService.findArticle(articleId);
 
+        // 인가 로직인데 이걸 시큐리티에서 처리할 방법은 없나?
         if(!principal.getName().equals(article.getWriterId())){
             throw new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
         }
@@ -134,12 +135,19 @@ public class BoardController {
     @PostMapping("/board/deleteArticle/{articleId}")
     public String deleteArticle(@PathVariable int articleId, Principal principal){
 
+
+        Article article = boardService.findArticle(articleId);
+        if(principal ==null||!principal.getName().equals(article.getWriterId())){
+            throw new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        }
+
         boardService.deleteArticle(articleId);
 
         return "redirect:/board/list";
 
 
     }
+
 
 
     private void buildPagingTool(Integer page, Integer listNum, PagingHandler pagingHandler, PagingBoxHandler pagingBoxHandler) {

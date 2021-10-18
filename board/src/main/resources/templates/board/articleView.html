@@ -57,8 +57,9 @@
             <div class="container">
                 <form name="replyWriteForm" sec:authorize="isAuthenticated()">
                     <div class="input-group">
-                        <textarea type="text" class="form-control" id="replyContent" name="replyContent" style="resize:none"></textarea>
-                        <div class="input-group-btn" >
+                        <textarea type="text" class="form-control" id="replyContent" name="replyContent"
+                                  style="resize:none"></textarea>
+                        <div class="input-group-btn">
                             <button class="btn btn-primary" type="button" name="commentInsertBtn"
                                     style="height: 100px" onclick="replyWrite()">등록
                             </button>
@@ -80,100 +81,99 @@
 <script src="/js/user/getCsrfToken.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
 <script th:inline="javascript">
+
+    const replyBox = document.getElementById("replyList");
+
     document.addEventListener("DOMContentLoaded",
-        function() {
+        function () {
 
-            const replyBox = document.getElementById("replyList");
             let token = getCsrfToken();
-            const xhr = new XMLHttpRequest();
-
             let articleId = [[${article.getArticleUid()}]];
+
+            const xhr = new XMLHttpRequest();
             xhr.open("GET", "/reply/list/" + articleId);
             xhr.setRequestHeader("X-XSRF-TOKEN", token);
             xhr.send();
 
             xhr.onload = () => {
-
-                if (xhr.status === 200||xhr.status === 201||xhr.status === 202) {
-                    let list = JSON.parse(xhr.response);
-
-                    console.log(list);
-
-                    for (const reply of list) {
-                        let replyHtmlSource = ' ';
-                        replyHtmlSource += '<div class="" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                        replyHtmlSource += '<div style="display: flex; flex-direction: row-reverse; font-size: small">';
-
-                        reply.replyWrittenDate[1] = reply.replyWrittenDate[1]-1;
-                        let date = moment(reply.replyWrittenDate).format('YY-MM-DD HH:mm:ss');
-                        replyHtmlSource += '<div>'+ date + '</div>';
-                        if (reply.replyWriterId === [[${#authentication.name}]]){
-                        replyHtmlSource += '<div style="flex-basis: 50px"><a href="#">삭제</a></div>';
-                        }
-                        replyHtmlSource += '</div>';
-                        replyHtmlSource += '<div style="display: flex; flex-direction: row">';
-                        replyHtmlSource += '<div style="flex-basis: 100px">'+reply.replyWriterId+'</div>';
-                        replyHtmlSource += '<div>'+reply.replyContents+'</div>';
-                        replyHtmlSource += '</div>';
-                        replyHtmlSource += '</div>';
-
-                        replyBox.innerHTML += replyHtmlSource;
-                    }
-                }
+                makeReplyBox(xhr, replyBox);
             }
-
-
         }
     );
 
- function replyWrite(){
-     let token = getCsrfToken();
-     const xhr = new XMLHttpRequest();
+    function replyWrite() {
+        let token = getCsrfToken();
+        let contents = {contents: document.getElementById("replyContent").value};
 
-     let contents = {contents: document.getElementById("replyContent").value};
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/reply/writeReply/" + [[${article.getArticleUid()}]]);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("X-XSRF-TOKEN", token);
+        xhr.send(JSON.stringify(contents));
 
-     xhr.open("POST", "/reply/writeReply/"+[[${article.getArticleUid()}]]);
-     xhr.setRequestHeader("content-type", "application/json");
-     xhr.setRequestHeader("X-XSRF-TOKEN", token);
-     xhr.send(JSON.stringify(contents));
-     const replyBox = document.getElementById("replyList");
+        xhr.onload = () => {
+            makeReplyBox(xhr, replyBox);
+        }
+    }
 
+    function deleteReplyConfirm(replyUid){
 
-     xhr.onload = () => {
+        if (confirm("댓글을 정말 삭제하시겠습니까?") == true){
+            deleteReply(replyUid);
+        }else{
+            return false;
+        }
+    }
 
-         if (xhr.status === 200 || xhr.status === 201 || xhr.status === 202) {
-             document.getElementById("replyContent").value='';
+    function deleteReply(replyUid) {
+        let token = getCsrfToken();
 
-             let list = JSON.parse(xhr.response);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/reply/deleteReply/" + [[${article.getArticleUid()}]] + "/" + replyUid);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("X-XSRF-TOKEN", token);
+        xhr.send();
 
-             replyBox.innerHTML = '';
+        xhr.onload = () => {
+            makeReplyBox(xhr, replyBox);
+        }
+    }
 
-             console.log(list);
+    function makeReplyBox(xhr, replyBox) {
+        if (xhr.status === 200 || xhr.status === 201 || xhr.status === 202) {
+            document.getElementById("replyContent").value = '';
 
-             for (const reply of list) {
-                 let replyHtmlSource = ' ';
-                 replyHtmlSource += '<div class="" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
-                 replyHtmlSource += '<div style="display: flex; flex-direction: row-reverse; font-size: small">';
-                 reply.replyWrittenDate[1] = reply.replyWrittenDate[1]-1;
-                 let date = moment(reply.replyWrittenDate).format('YY-MM-DD HH:mm:ss');
-                 replyHtmlSource += '<div>' + date + '</div>';
-                 if (reply.replyWriterId === [[${#authentication.name}]]) {
-                     replyHtmlSource += '<div style="flex-basis: 50px"><a href="#">삭제</a></div>';
-                 }
-                 replyHtmlSource += '</div>';
-                 replyHtmlSource += '<div style="display: flex; flex-direction: row">';
-                 replyHtmlSource += '<div style="flex-basis: 100px">' + reply.replyWriterId + '</div>';
-                 replyHtmlSource += '<div>' + reply.replyContents + '</div>';
-                 replyHtmlSource += '</div>';
-                 replyHtmlSource += '</div>';
+            let list = JSON.parse(xhr.response);
 
-                 replyBox.innerHTML += replyHtmlSource;
+            replyBox.innerHTML = '';
 
-             }
-         }
+            console.log(list);
 
-     }
- }
+            for (const reply of list) {
+                let replyHtmlSource = ' ';
+                replyHtmlSource += '<div class="" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+                replyHtmlSource += '<div style="display: flex; flex-direction: row-reverse; font-size: small">';
+                reply.replyWrittenDate[1] = reply.replyWrittenDate[1] - 1;
+                let date = moment(reply.replyWrittenDate).format('YY-MM-DD HH:mm:ss');
+                replyHtmlSource += '<div>' + date + '</div>';
+
+                if (reply.replyWriterId === [[${#authentication.name}]]) {
+                    replyHtmlSource += '<div style="flex-basis: 50px"><a href="#" id="deleteReply' + reply.replyUid + '" ' +
+                        ' onclick="deleteReplyConfirm(' + reply.replyUid + ');return false">삭제</a></div>';
+                }
+
+                replyHtmlSource += '</div>';
+                replyHtmlSource += '<div style="display: flex; flex-direction: row">';
+                replyHtmlSource += '<div style="flex-basis: 100px">' + reply.replyWriterId + '</div>';
+                replyHtmlSource += '<div>' + reply.replyContents + '</div>';
+                replyHtmlSource += '</div>';
+                replyHtmlSource += '</div>';
+
+                replyBox.innerHTML += replyHtmlSource;
+
+            }
+        }
+    }
 
 </script>
 </html>

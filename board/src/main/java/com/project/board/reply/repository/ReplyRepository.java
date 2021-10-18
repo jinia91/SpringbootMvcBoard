@@ -7,5 +7,7 @@ import java.util.List;
 public interface ReplyRepository {
 
     void writeReply(Reply reply);
+    Reply getReply(int replyUid);
+    void deleteReply(int replyUid);
     List<Reply> getReplys(int articleUid);
 }

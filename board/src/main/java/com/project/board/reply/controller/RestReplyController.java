@@ -5,7 +5,6 @@ import com.project.board.reply.dto.ReplyDto;
 import com.project.board.reply.service.ReplyServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -29,11 +28,34 @@ public class RestReplyController {
     return replyService.getReplyList(articleUid);
     }
 
+    @PostMapping("/reply/deleteReply/{articleUid}/{replyUid}")
+    public @ResponseBody
+    List<Reply> deleteReply(@PathVariable int articleUid,
+                            @PathVariable int replyUid, Principal principal) {
+
+        Reply reply = replyService.getReply(replyUid);
+        if(principal ==null||!principal.getName().equals(reply.getReplyWriterId())){
+            throw new IllegalArgumentException("작성자와 로그인정보가 일치하지 않습니다");
+        }
+
+        replyService.deleteReply(replyUid);
+
+        return replyService.getReplyList(articleUid);
+    }
+
+
     @GetMapping("/reply/list/{articleUid}")
     public @ResponseBody
     List<Reply> getReplyList(@PathVariable int articleUid) {
 
-        return replyService.getReplyList(articleUid);
+        List<Reply> replyList = replyService.getReplyList(articleUid);
+
+        for (Reply reply : replyList) {
+            System.out.println("reply.getReplyWrittenDate() = " + reply.getReplyWrittenDate());
+        }
+
+
+        return replyList;
     }
 
 

@@ -1,10 +1,7 @@
 package com.project.board.reply.repository;
 
 import com.project.board.reply.domain.Reply;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -26,4 +23,14 @@ public interface ReplyMybatisRepository extends ReplyRepository {
             "where articleUid = #{articleUid} " +
             "order by replyUid")
     List<Reply> getReplys(int articleUid);
+
+    @Select("Select * " +
+            "from reply " +
+            "where replyUid = #{replyUid} ")
+    Reply getReply(int replyUid);
+
+    @Delete("Delete " +
+            "from reply " +
+            "where replyUid = #{replyUid} ")
+    void deleteReply(int replyUid);
 }

@@ -22,6 +22,11 @@ public class ReplyServiceImpl {
         return replyRepository.getReplys(articleUid);
     }
 
+    public Reply getReply(int replyUid){
+        return replyRepository.getReply(replyUid);
+    }
 
-
+    public void deleteReply(int replyUid) {
+        replyRepository.deleteReply(replyUid);
+    }
 }
