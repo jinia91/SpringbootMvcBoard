@@ -1,5 +1,6 @@
 package com.project.board.board.controller;
 
+import com.project.board.App;
 import com.project.board.board.domain.Article;
 import com.project.board.board.dto.ArticleDto;
 import com.project.board.board.handler.PagingBoxHandler;

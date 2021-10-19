@@ -88,7 +88,6 @@ const editorMobile = new toastui.Editor({
 editor.setMarkdown(contents.value);
 editorMobile.setMarkdown(contents.value);
 
-//blob, callback
 
 function uploadImage(blob) {
     let token = getCsrfToken();
@@ -126,12 +125,23 @@ function post(){
         return;
     }
 
- const getContentsMd = editor.getMarkdown();
- contents.value = getContentsMd;
+
+ contents.value = editor.getMarkdown();
  document.getElementById("writeArticleForm").submit();
 
 }
 
+function postMobile(){
+
+    if(!checkTitle()){
+        alert("제목을 입력해주세요")
+        return;
+    }
+
+    contents.value = editorMobile.getMarkdown();
+    document.getElementById("writeArticleForm").submit();
+
+}
 
 
 
