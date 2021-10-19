@@ -92,6 +92,6 @@
 <p>빈검증을 사용하면서 검증로직들이 원하는 순서대로 수행되지 않고 모든 검증을 한번에 다 수행하는 문제를 겪었는데 Validation의 GroupSequence를 통해 이를 해결했습니다.</p>
 <p><a href="https://github.com/jinia91/SpringbootMvcBoard/blob/master/board/src/main/java/com/project/board/user/validation/ValidationSequenceGroups.java">GroupSequence 애너테이션 활용</a></p>
 <p><strong>메일 인증</strong><br>
-<img src="https://github.com/jinia91/blogTest/blob/main/img/c534be70-3bab-46b6-be40-978bc33ee7d1.gif?raw=true" alt="첨부 이미지"></p>
+<img src="https://github.com/jinia91/blogTest/blob/main/img/a7f5fbdd-bcf4-45d4-8ddd-2efd15791d15.gif?raw=true" alt="첨부 이미지"></p>
 <p>회원가입시 Gmail SMTP를 통해 8자리 난수를 전송토록했으며 이때 난수생성은 시드의 보안성을 위해 SecureRandom을 사용하였습니다.</p>
 
