@@ -94,4 +94,14 @@
 <p><strong>메일 인증</strong><br>
 <img src="https://github.com/jinia91/blogTest/blob/main/img/a7f5fbdd-bcf4-45d4-8ddd-2efd15791d15.gif?raw=true" alt="첨부 이미지"></p>
 <p>회원가입시 Gmail SMTP를 통해 8자리 난수를 전송토록했으며 이때 난수생성은 시드의 보안성을 위해 SecureRandom을 사용하였습니다.</p>
+<p><strong>회원가입 성공시 비밀번호 암호화 DB저장<br>
+로그인 실패시 에러처리<br>
+아이디 분실시 찾기<br>
+비밀번호 분실시 무작위 난수 비밀번호 메일로 전송<br>
+프로필 화면 / 수정<br>
+게시판 기본 CRUD<br>
+Toast UI 이용한 마크다운 게시물 작성 및 읽기<br>
+게시물 작성시 바이너리코드로 저장되는 이미지를 별도 서버로 분리하여 메인 DB 부담 최소화<br>
+페이징과 한화면에 보이는 글갯수 조절<br>
+아작스로 댓글 CRD 기능 구현</strong></p>
 
